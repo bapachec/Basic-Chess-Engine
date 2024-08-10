@@ -2,29 +2,35 @@ package com.github.bapachec.chessengine;
 import com.github.bapachec.chessengine.pieces.*;
 
 public class Board {
-    private Piece[][] board = new Piece[8][8];
+    private final Piece[][] BOARD = new Piece[8][8];
 
     public void play() {
         populateBoard();
-        board[7][0] = new Rook();
         display();
     }
 
     private void populateBoard() {
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                board[i][j] = null;
+
+        for (int i = 0; i <8; i++) {
+            BOARD[1][i] = new Pawn();
+            BOARD[6][i] = new Pawn();
+        }
+
+        BOARD[0][0] = new Rook();
+        BOARD[0][7] = new Rook();
+        BOARD[7][0] = new Rook();
+        BOARD[7][7] = new Rook();
 
     }
 
     private void display() {
-        for(int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++)
-                if (board[i][j] == null) {
+                if (BOARD[i][j] == null) {
                     System.out.print("[ ]");
                 }
                 else {
-                    System.out.print("[" + board[i][j] + "]");
+                    System.out.print("[" + BOARD[i][j] + "]");
                 }
             System.out.println();
         }
