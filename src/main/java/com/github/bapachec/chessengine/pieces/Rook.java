@@ -6,13 +6,6 @@ public class Rook extends Piece {
         super(isWhite);
     }
 
-    @Override
-    public boolean isLegalMove(int row, int column){
-        if (super.isLegalMove(row, column))
-            return false;
-
-        return true;
-    }
 
     @Override
     public String toString() {
