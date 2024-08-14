@@ -3,6 +3,11 @@ package com.github.bapachec.chessengine.pieces;
 public class Piece {
     private int row;
     private int column;
+    private boolean isWhite;
+
+    public Piece (boolean isWhite) {
+        this.isWhite = isWhite;
+    }
 
     public int getRow() { return row; }
     public void setRow(int row) { this.row = row; }
