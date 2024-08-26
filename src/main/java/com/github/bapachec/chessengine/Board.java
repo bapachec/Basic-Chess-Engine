@@ -39,28 +39,46 @@ public class Board {
 
     }
 
-//display for testing, replacing it for object that represents the state of the board
-    public void display() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++)
-                if (BOARD[i][j] == null) {
-                    System.out.print("[ ]");
-                }
-                else {
-                    System.out.print("[" + BOARD[i][j] + "]");
-                }
-            System.out.println();
-        }
-    }
 
-    public void movePiece(byte[] location, byte row, byte col) {
+    public boolean movePiece(byte[] location, byte row, byte col, boolean isWhitesTurn) {
         Piece piece = BOARD[location[0]][location[1]];
+        if (piece == null)
+            return false;
+
+        if (isWhitesTurn){
+            if (!piece.isWhite()) {
+                return false;
+            }
+        }
+        else {
+            if (piece.isWhite()) {
+                return false;
+            }
+        }
 
         if (!piece.isLegalMove(row,col))
-            return;
+            return false;
 
         BOARD[location[0]][location[1]] = null;
         BOARD[row][col] = piece;
 
+        return true;
+
+    }
+
+    public char[][] boardData() {
+        char[][] board = new char[8][8];
+        for(int i = 0; i < 8; i ++) {
+            for(int j = 0; j < 8; j++) {
+                if (BOARD[i][j] != null) {
+                    board[i][j] = BOARD[i][j].toString().charAt(0);
+                }
+                else {
+                    board[i][j] = board[i][j] = '_';
+                }
+            }
+        }
+
+        return board;
     }
 }

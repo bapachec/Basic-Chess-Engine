@@ -3,11 +3,13 @@ package com.github.bapachec.chessengine.pieces;
 public class Piece {
     private int row;
     private int column;
-    private boolean isWhite;
+    private final boolean IS_WHITE;
 
     public Piece (boolean isWhite) {
-        this.isWhite = isWhite;
+        IS_WHITE = isWhite;
     }
+
+    public boolean isWhite() { return IS_WHITE; }
 
     public int getRow() { return row; }
     public void setRow(int row) { this.row = row; }
@@ -28,9 +30,11 @@ public class Piece {
         return row == this.row && column == this.column;
     }
 
+
+
     @Override
     public String toString() {
-        return "Piece";
+        return "_";
     }
 
 }
