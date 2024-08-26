@@ -32,6 +32,11 @@ public class PlayChess {
                     piece_location[0] = scan.nextByte();
                     System.out.print("Col: ");
                     piece_location[1] = scan.nextByte();
+                    if (!engine.validPiece(piece_location)) {
+                        System.out.println("Not your piece");
+                        continue;
+                    }
+
 
                     scan.nextLine(); //clears input buffer
                     //make a move

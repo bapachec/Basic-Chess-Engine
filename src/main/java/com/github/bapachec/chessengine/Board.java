@@ -39,22 +39,25 @@ public class Board {
 
     }
 
-
-    public boolean movePiece(byte[] location, byte row, byte col, boolean isWhitesTurn) {
+    //to check if chosen piece is player's color
+    public boolean samePiece(byte[] location, boolean isWhitesTurn) {
         Piece piece = BOARD[location[0]][location[1]];
         if (piece == null)
             return false;
 
         if (isWhitesTurn){
-            if (!piece.isWhite()) {
-                return false;
-            }
+            return piece.isWhite();
         }
         else {
-            if (piece.isWhite()) {
-                return false;
-            }
+            return !piece.isWhite();
         }
+    }
+
+
+    public boolean movePiece(byte[] location, byte row, byte col) {
+        Piece piece = BOARD[location[0]][location[1]];
+        if (piece == null)
+            return false;
 
         if (!piece.isLegalMove(row,col))
             return false;
