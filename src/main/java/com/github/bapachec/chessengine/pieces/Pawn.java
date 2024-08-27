@@ -2,9 +2,13 @@ package com.github.bapachec.chessengine.pieces;
 
 public class Pawn extends Piece{
 
-    public Pawn(boolean isWhite) {
-        super(isWhite);
+    private boolean isFirstMove = true;
+
+
+    public Pawn(boolean isWhite, int row, int column) {
+        super(isWhite, row, column);
     }
+
 
     @Override
     public String toString() {

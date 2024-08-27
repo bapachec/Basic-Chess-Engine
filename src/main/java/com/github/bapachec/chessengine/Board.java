@@ -7,35 +7,35 @@ public class Board {
     public void populateBoard() {
 
         for (int i = 0; i <8; i++) {
-            BOARD[1][i] = new Pawn(false);
-            BOARD[6][i] = new Pawn(true);
+            BOARD[1][i] = new Pawn(false, 1, i);
+            BOARD[6][i] = new Pawn(true, 6, i);
         }
 
         //Rooks
-        BOARD[0][0] = new Rook(false);
-        BOARD[0][7] = new Rook(false);
-        BOARD[7][0] = new Rook(true);
-        BOARD[7][7] = new Rook(true);
+        BOARD[0][0] = new Rook(false, 0, 0);
+        BOARD[0][7] = new Rook(false, 0, 7);
+        BOARD[7][0] = new Rook(true, 7, 0);
+        BOARD[7][7] = new Rook(true, 7, 7);
 
         //Knights
-        BOARD[0][1] = new Knight(false);
-        BOARD[0][6] = new Knight(false);
-        BOARD[7][1] = new Knight(true);
-        BOARD[7][6] = new Knight(true);
+        BOARD[0][1] = new Knight(false, 0, 1);
+        BOARD[0][6] = new Knight(false, 0, 6);
+        BOARD[7][1] = new Knight(true, 7, 1);
+        BOARD[7][6] = new Knight(true, 7, 6);
 
         //Bishops
-        BOARD[0][2] = new Bishop(false);
-        BOARD[0][5] = new Bishop(false);
-        BOARD[7][2] = new Bishop(true);
-        BOARD[7][5] = new Bishop(true);
+        BOARD[0][2] = new Bishop(false, 0, 2);
+        BOARD[0][5] = new Bishop(false, 0, 5);
+        BOARD[7][2] = new Bishop(true, 7, 2);
+        BOARD[7][5] = new Bishop(true, 7, 5);
 
         //Queens
-        BOARD[0][3] = new Queen(false);
-        BOARD[7][3] = new Queen(true);
+        BOARD[0][3] = new Queen(false, 0, 3);
+        BOARD[7][3] = new Queen(true, 7, 3);
 
         //Kings
-        BOARD[0][4] = new King(false);
-        BOARD[7][4] = new King(true);
+        BOARD[0][4] = new King(false, 0, 4);
+        BOARD[7][4] = new King(true, 7, 4);
 
     }
 
@@ -63,6 +63,8 @@ public class Board {
             return false;
 
         BOARD[location[0]][location[1]] = null;
+        piece.setRow(row);
+        piece.setColumn(col);
         BOARD[row][col] = piece;
 
         return true;

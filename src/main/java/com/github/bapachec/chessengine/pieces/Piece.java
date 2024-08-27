@@ -5,8 +5,10 @@ public class Piece {
     private int column;
     private final boolean IS_WHITE;
 
-    public Piece (boolean isWhite) {
+    public Piece (boolean isWhite, int row, int column) {
         IS_WHITE = isWhite;
+        this.row = row;
+        this.column = column;
     }
 
     public boolean isWhite() { return IS_WHITE; }
