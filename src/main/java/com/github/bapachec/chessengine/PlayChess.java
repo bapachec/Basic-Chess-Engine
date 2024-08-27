@@ -51,6 +51,7 @@ public class PlayChess {
 
                     scan.nextLine(); //clears input buffer
 
+                    /*
                     //quit option
                     System.out.println("Do you want to quit? Enter q or Q to quit");
                     String input = scan.nextLine();
@@ -59,6 +60,8 @@ public class PlayChess {
                         stop = true;
                         break;
                     }
+                    */
+
                 }
             }
             catch (NumberFormatException e) {
