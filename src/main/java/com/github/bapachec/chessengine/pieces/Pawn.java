@@ -11,6 +11,23 @@ public class Pawn extends Piece{
 
 
     @Override
+    public boolean isLegalMove(int row, int column) {
+        if (!super.isLegalMove(row, column))
+            return false;
+
+        if (Math.abs(row - this.getRow()) > 1) {
+            if (isFirstMove && Math.abs(row - getRow()) <= 2) {
+                isFirstMove = false;
+                return true;
+            }
+            return false;
+        }
+
+        isFirstMove = false;
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "P";
     }
