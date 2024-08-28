@@ -15,6 +15,9 @@ public class Pawn extends Piece{
         if (!super.isLegalMove(row, column))
             return false;
 
+        if (Math.abs(column - getColumn()) > 1)
+            return false;
+
         if (Math.abs(row - this.getRow()) > 1) {
             if (isFirstMove && Math.abs(row - getRow()) <= 2) {
                 isFirstMove = false;

@@ -56,8 +56,12 @@ public class Board {
 
     public boolean movePiece(byte[] location, byte row, byte col) {
         Piece piece = BOARD[location[0]][location[1]];
-        if (piece == null)
-            return false;
+        //if (piece == null) not needed i think
+        //    return false;
+        Piece targetPiece = BOARD[row][col];
+        if (targetPiece != null)
+            if (piece.isWhite() == targetPiece.isWhite())
+                return false;
 
         if (!piece.isLegalMove(row,col))
             return false;
