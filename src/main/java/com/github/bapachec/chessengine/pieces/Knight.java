@@ -7,8 +7,8 @@ public class Knight extends Piece {
     }
 
     @Override
-    public boolean isLegalMove(int row, int column) {
-        if (!super.isLegalMove(row, column))
+    public boolean isLegalMove(Piece[][] board, int row, int column) {
+        if (!super.isLegalMove(board, row, column))
             return false;
 
 

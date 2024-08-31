@@ -7,15 +7,16 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public boolean isLegalMove(int row, int column) {
-        if (!super.isLegalMove(row, column))
+    public boolean isLegalMove(Piece[][] board, int row, int column) {
+        if (!super.isLegalMove(board, row, column))
             return false;
 
 
-        //if (Math.abs(row - getRow()) == 0 || Math.abs(column - getColumn()) == 0)
-        //    return false;
+        if (Math.abs(row - getRow()) != Math.abs(column - getColumn()))
+            return false;
 
-        return Math.abs(row - getRow()) == Math.abs(column - getColumn()); //simplified by ide
+        return isDagClear(board, this, row, column);
+        //return Math.abs(row - getRow()) == Math.abs(column - getColumn()); //simplified by ide
     }
 
     @Override

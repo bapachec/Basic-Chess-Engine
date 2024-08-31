@@ -7,14 +7,22 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean isLegalMove(int row, int column) {
-        if (!super.isLegalMove(row, column))
+    public boolean isLegalMove(Piece[][] board, int row, int column) {
+        if (!super.isLegalMove(board, row, column))
             return false;
 
-        if (Math.abs(row - getRow()) != 0 && Math.abs(column - getColumn()) != 0)
+        int rowAbs = Math.abs(row - getRow());
+        int colAbs = Math.abs(column - getColumn());
+
+        if (rowAbs != 0 && colAbs != 0)
             return false;
 
-        return true;
+        if (rowAbs == 0)
+            return (isRowClear(board, this, column));
+        else
+            return (isColClear(board, this, row));
+
+
     }
 
     @Override

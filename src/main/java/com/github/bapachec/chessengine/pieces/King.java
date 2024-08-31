@@ -7,8 +7,8 @@ public class King extends Piece {
     }
 
     @Override
-    public boolean isLegalMove(int row, int column) {
-        if (!super.isLegalMove(row, column))
+    public boolean isLegalMove(Piece[][] board, int row, int column) {
+        if (!super.isLegalMove(board, row, column))
             return false;
 
         if (Math.abs(row - getRow()) > 1 || Math.abs(column - getColumn()) > 1)

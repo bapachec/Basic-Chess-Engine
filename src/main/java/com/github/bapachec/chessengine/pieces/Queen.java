@@ -7,17 +7,26 @@ public class Queen extends Piece {
     }
 
     @Override
-    public boolean isLegalMove(int row, int column) {
-        if (!super.isLegalMove(row, column))
+    public boolean isLegalMove(Piece[][] board, int row, int column) {
+        if (!super.isLegalMove(board, row, column))
             return false;
 
-        //acts like a bishop
-        if (Math.abs(row - getRow()) == Math.abs(column - getColumn())) {
-            return true;
+        int rowAbs = Math.abs(row - getRow());
+        int colAbs = Math.abs(column - getColumn());
+
+        //if acts like a bishop
+        if (rowAbs == colAbs) {
+            return isDagClear(board, this, row, column);
         }
 
         //if acts like a rook
-        return Math.abs(row - getRow()) == 0 || Math.abs(column - getColumn()) == 0; //simplified
+        if (rowAbs != 0 && colAbs != 0)
+            return false;
+
+        if (rowAbs == 0)
+            return (isRowClear(board, this, column));
+        else
+            return (isColClear(board, this, row));
 
     }
 

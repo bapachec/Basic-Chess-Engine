@@ -63,7 +63,7 @@ public class Board {
             if (piece.isWhite() == targetPiece.isWhite())
                 return false;
 
-        if (!piece.isLegalMove(row,col))
+        if (!piece.isLegalMove(BOARD, row, col))
             return false;
 
         BOARD[location[0]][location[1]] = null;

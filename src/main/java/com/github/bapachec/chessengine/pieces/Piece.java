@@ -1,6 +1,8 @@
 package com.github.bapachec.chessengine.pieces;
 
-public class Piece {
+import com.github.bapachec.chessengine.validation.MoveValidator;
+
+public class Piece implements MoveValidator {
     private int row;
     private int column;
     private final boolean IS_WHITE;
@@ -20,7 +22,7 @@ public class Piece {
     public void setColumn(int column) { this.column = column; }
 
 
-    public boolean isLegalMove(int row, int column) {
+    public boolean isLegalMove(Piece[][] board, int row, int column) {
         return isOnBoard(row,column) && !isCurrentLocation(row, column);
     }
 
