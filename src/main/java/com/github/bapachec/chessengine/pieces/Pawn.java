@@ -15,10 +15,18 @@ public class Pawn extends Piece{
         if (!super.isLegalMove(board, row, column))
             return false;
 
-        if (Math.abs(column - getColumn()) > 1)
+        int rowAbs = Math.abs(row - getRow());
+        int colAbs = Math.abs(column - getColumn());
+
+        if (rowAbs == 1 && colAbs == 1){
+            if (board[row][column] != null)
+                return true;
+        }
+
+        if (colAbs >= 1)
             return false;
 
-        if (Math.abs(row - this.getRow()) > 1) {
+        if (rowAbs > 1) {
             if (isFirstMove && Math.abs(row - getRow()) <= 2) {
                 isFirstMove = false;
                 return true;
