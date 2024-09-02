@@ -59,14 +59,25 @@ public class Board {
         //if (piece == null) not needed i think
         //    return false;
         Piece targetPiece = BOARD[row][col];
-        if (targetPiece != null)
-            if (piece.isWhite() == targetPiece.isWhite())
-                return false;
+        boolean switchPieces = false;
+        targetpiece: {
+            if (targetPiece != null)
+                if (piece.isWhite() == targetPiece.isWhite()) {
+                    if (targetPiece instanceof Rook) {
+                        switchPieces = true;
+                        break targetpiece;
+                    }
+                    return false;
+                }
+        }
+
 
         if (!piece.isLegalMove(BOARD, row, col))
             return false;
 
         BOARD[location[0]][location[1]] = null;
+        if (switchPieces)
+            BOARD[location[0]][location[1]] = targetPiece;
         piece.setRow(row);
         piece.setColumn(col);
         BOARD[row][col] = piece;

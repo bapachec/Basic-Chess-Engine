@@ -1,6 +1,7 @@
 package com.github.bapachec.chessengine.pieces;
 
 public class Rook extends Piece {
+    private boolean notMoved = true;
 
     public Rook(boolean isWhite, int row, int column) {
         super(isWhite, row, column);
@@ -18,11 +19,18 @@ public class Rook extends Piece {
             return false;
 
         if (rowAbs == 0)
-            return (isRowClear(board, this, column));
-        else
-            return (isColClear(board, this, row));
+            if (!isRowClear(board, this, column))
+                return false;
+            //return (isRowClear(board, this, column));
+        else if (!isColClear(board, this, row))
+            return false;
 
+        notMoved = false;
+        return true;
+    }
 
+    public boolean getNotMoved() {
+        return notMoved;
     }
 
     @Override
