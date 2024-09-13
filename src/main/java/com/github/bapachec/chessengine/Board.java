@@ -2,15 +2,32 @@ package com.github.bapachec.chessengine;
 import com.github.bapachec.chessengine.pieces.*;
 
 public class Board {
-    private final Piece[][] BOARD = new Piece[8][8];
+    private static final Piece[][] BOARD = new Piece[8][8];
+    private static boolean whiteTurn = true;
+    private static int whiteKnights = 2;
+    private static int blackKnights = 2;
 
     public void populateBoard() {
-
+        /*
         for (int i = 0; i <8; i++) {
             BOARD[1][i] = new Pawn(false, 1, i);
             BOARD[6][i] = new Pawn(true, 6, i);
         }
+         */
 
+        //testing check function
+        //blacks
+        BOARD[0][0] = new Rook(false, 0, 0);
+        BOARD[0][4] = new King(false, 0, 4);
+        BOARD[0][5] = new Bishop(false, 0, 5);
+        BOARD[1][5] = new Pawn(false, 1, 5);
+
+        //whites
+        BOARD[1][3] = new Pawn(true, 1, 3);
+        BOARD[0][6] = new Rook(true, 0, 6);
+        BOARD[2][4] = new Queen(true, 2, 4);
+
+        /*
         //Rooks
         BOARD[0][0] = new Rook(false, 0, 0);
         BOARD[0][7] = new Rook(false, 0, 7);
@@ -36,7 +53,7 @@ public class Board {
         //Kings
         BOARD[0][4] = new King(false, 0, 4);
         BOARD[7][4] = new King(true, 7, 4);
-
+    */
     }
 
     //to check if chosen piece is player's color
@@ -82,6 +99,7 @@ public class Board {
         piece.setColumn(col);
         BOARD[row][col] = piece;
 
+        whiteTurn = !whiteTurn;
         return true;
 
     }
@@ -100,5 +118,76 @@ public class Board {
         }
 
         return board;
+    }
+
+    public static class KingCheck {
+
+        public static boolean isKingNotChecked(int row, int col) {
+            //row
+            for (int i = 0; i < 8; i++) {
+                Piece piece = BOARD[row][i];
+                if (piece == null)
+                    continue;
+                if (piece.isWhite() != whiteTurn)
+                    if (piece.isLegalMove(BOARD, row, col))
+                        return false;
+
+            }
+
+            //diag
+            if (!whiteTurn) {
+                for (int i = row + 1, j = col - 1; j > 0 ; i++, j--) {
+                    Piece piece = BOARD[i][j];
+                    if (piece == null)
+                        continue;
+                    if (piece.isWhite() != whiteTurn)
+                        if (piece.isLegalMove(BOARD, row, col))
+                            return false;
+                }
+
+                for (int i = row + 1, j = col + 1; j < 8 ; i++, j++) {
+                    Piece piece = BOARD[i][j];
+                    if (piece == null)
+                        continue;
+                    if (piece.isWhite() != whiteTurn)
+                        if (piece.isLegalMove(BOARD, row, col))
+                            return false;
+                }
+
+            }
+            else
+            {
+                for (int i = row - 1, j = col - 1; j > 0 ; i--, j--) {
+                    Piece piece = BOARD[i][j];
+                    if (piece == null)
+                        continue;
+                    if (piece.isWhite() != whiteTurn)
+                        if (piece.isLegalMove(BOARD, row, col))
+                            return false;
+                }
+
+                for (int i = row - 1, j = col + 1; j < 8 ; i--, j++) {
+                    Piece piece = BOARD[i][j];
+                    if (piece == null)
+                        continue;
+                    if (piece.isWhite() != whiteTurn)
+                        if (piece.isLegalMove(BOARD, row, col))
+                            return false;
+                }
+            }
+
+            //col
+            for (int j = 0; j < 8; j++) {
+                Piece piece = BOARD[j][col];
+                if (piece == null)
+                    continue;
+                if (piece.isWhite() != whiteTurn)
+                    if (piece.isLegalMove(BOARD, row, col))
+                        return false;
+            }
+
+
+            return true;
+        }
     }
 }

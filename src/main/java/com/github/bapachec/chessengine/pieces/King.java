@@ -1,5 +1,7 @@
 package com.github.bapachec.chessengine.pieces;
 
+import static com.github.bapachec.chessengine.Board.KingCheck.isKingNotChecked;
+
 public class King extends Piece {
     private boolean notMoved = true;
 
@@ -14,7 +16,8 @@ public class King extends Piece {
 
         if (Math.abs(row - getRow()) > 1 || Math.abs(column - getColumn()) > 1) {
             if (board[row][column] instanceof Rook rook) {
-                return rook.getNotMoved() && isRowClear(board, this, column);
+                if (isKingNotChecked(getRow(), getColumn()))
+                    return rook.getNotMoved() && isRowClear(board, this, column);
             }
 
             return false;
