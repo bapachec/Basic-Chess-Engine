@@ -4,17 +4,21 @@ import com.github.bapachec.chessengine.pieces.*;
 public class Board {
     private static final Piece[][] BOARD = new Piece[8][8];
     private static boolean whiteTurn = true;
-    private static int whiteKnights = 2;
-    private static int blackKnights = 2;
+    private boolean promotionFlag = false;
+    private Piece lastPieceMoved = null;
+    //private static int whiteKnights = 2;
+    //private static int blackKnights = 2;
 
     public void populateBoard() {
 
+        /*
         for (int i = 0; i <8; i++) {
             BOARD[1][i] = new Pawn(false, 1, i);
             BOARD[6][i] = new Pawn(true, 6, i);
         }
-
-
+        */
+        BOARD[1][4] = new Pawn(true, 1, 4);
+        BOARD[6][4] = new Pawn(false, 6, 4);
         /*
         //testing en passant function
         //blacks
@@ -26,6 +30,7 @@ public class Board {
         BOARD[6][6] = new Pawn(true, 6, 6);
         */
 
+        /*
         //Rooks
         BOARD[0][0] = new Rook(false, 0, 0);
         BOARD[0][7] = new Rook(false, 0, 7);
@@ -51,6 +56,7 @@ public class Board {
         //Kings
         BOARD[0][4] = new King(false, 0, 4);
         BOARD[7][4] = new King(true, 7, 4);
+         */
 
     }
 
@@ -69,7 +75,7 @@ public class Board {
     }
 
 
-    public boolean movePiece(byte[] location, byte row, byte col) {
+    public boolean movePiece(byte[] location, int row, int col) {
         Piece piece = BOARD[location[0]][location[1]];
         //if (piece == null) not needed i think
         //    return false;
@@ -96,7 +102,11 @@ public class Board {
         piece.setRow(row);
         piece.setColumn(col);
         BOARD[row][col] = piece;
+        if (piece instanceof Pawn && (row == 0 || row == 7))
+            if ((piece.isWhite() && row == 0) || (!piece.isWhite() && row == 7))
+                promotionFlag = true;
 
+        lastPieceMoved = piece;
         whiteTurn = !whiteTurn;
         return true;
 
@@ -116,6 +126,30 @@ public class Board {
         }
 
         return board;
+    }
+
+    public boolean getPromotionFlag() {
+        return promotionFlag;
+    }
+
+    /*
+    public void resetPromotionFlag() {
+        promotionFlag = !promotionFlag;
+    }
+    */
+    public void pawnPromotion(int choice) {
+
+        Piece new_piece = switch (choice) {
+            case 1 -> new Queen(lastPieceMoved.isWhite(), lastPieceMoved.getRow(), lastPieceMoved.getColumn());
+            case 2 -> new Bishop(lastPieceMoved.isWhite(), lastPieceMoved.getRow(), lastPieceMoved.getColumn());
+            case 3 -> new Rook(lastPieceMoved.isWhite(), lastPieceMoved.getRow(), lastPieceMoved.getColumn());
+            case 4 -> new Knight(lastPieceMoved.isWhite(), lastPieceMoved.getRow(), lastPieceMoved.getColumn());
+            default -> throw new IllegalStateException("Unexpected value: " + choice);
+        };
+
+        BOARD[new_piece.getRow()][new_piece.getColumn()] = new_piece;
+        promotionFlag = false;
+
     }
 
     public static class KingCheck {

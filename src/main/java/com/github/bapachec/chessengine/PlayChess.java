@@ -1,13 +1,13 @@
 package com.github.bapachec.chessengine;
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class PlayChess {
+public class PlayChess implements UserInterface {
+    Scanner scan = new Scanner(System.in);
+    @Override
+    public void run (ChessEngine engine) {
 
-    public static void main (String[] args) {
-        ChessEngine engine = new ChessEngine();
-        Scanner scan = new Scanner(System.in);
+
         boolean stop = false;
         engine.start();
         byte[] piece_location = new byte[2];
@@ -48,7 +48,6 @@ public class PlayChess {
                     System.out.println("Row: " + row + " Col: " + col);
 
                     engine.makeMove(piece_location, row, col);
-
                     scan.nextLine(); //clears input buffer
 
                     /*
@@ -80,6 +79,8 @@ public class PlayChess {
 
     }
 
+
+
     public static void displayBoard(char[][] board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++)
@@ -88,4 +89,17 @@ public class PlayChess {
         }
     }
 
+    @Override
+    public int promotionRequest() {
+        String[] list = new String[] {"1: Queen", "2: Bishop", "3: Rook", "4: Knight"};
+        System.out.println("The pawn you just moved needs to be promoted.\nPlease choose a new piece for promotion");
+        System.out.println("List of pieces to promote to:");
+
+        for(String pieceType: list){
+            System.out.println(pieceType);
+        }
+
+        return scan.nextInt();
+
+    }
 }
