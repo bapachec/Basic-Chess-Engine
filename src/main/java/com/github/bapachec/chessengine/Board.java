@@ -11,26 +11,14 @@ public class Board {
 
     public void populateBoard() {
 
-        /*
+
         for (int i = 0; i <8; i++) {
             BOARD[1][i] = new Pawn(false, 1, i);
             BOARD[6][i] = new Pawn(true, 6, i);
         }
-        */
-        BOARD[1][4] = new Pawn(true, 1, 4);
-        BOARD[6][4] = new Pawn(false, 6, 4);
-        /*
-        //testing en passant function
-        //blacks
-        BOARD[1][3] = new Pawn(false, 1, 3);
-        BOARD[3][5] = new Pawn(false, 3, 5);
 
-        //whites
-        BOARD[4][4] = new Pawn(true, 4, 4);
-        BOARD[6][6] = new Pawn(true, 6, 6);
-        */
 
-        /*
+
         //Rooks
         BOARD[0][0] = new Rook(false, 0, 0);
         BOARD[0][7] = new Rook(false, 0, 7);
@@ -56,7 +44,7 @@ public class Board {
         //Kings
         BOARD[0][4] = new King(false, 0, 4);
         BOARD[7][4] = new King(true, 7, 4);
-         */
+
 
     }
 
