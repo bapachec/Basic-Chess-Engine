@@ -45,13 +45,23 @@ public interface MoveValidator {
 
     default public boolean isDagClear(Piece[][] board, Piece piece, int row, int col) {
         if (row - piece.getRow() < 0) {
-            for (int i = piece.getRow() - 1, j = piece.getColumn() + 1; i > row ; i--, j++) {
+            int n = 0;
+            if (col - piece.getColumn() < 0)
+                n = -1;
+            else
+                n = 1;
+            for (int i = piece.getRow() - 1, j = piece.getColumn() + n; i > row ; i--, j += n) {
                 if (board[i][j] != null)
                     return false;
             }
         }
         else {
-            for (int i = piece.getRow() + 1, j = piece.getColumn() - 1; i < row ; i++, j--) {
+            int n = 0;
+            if (col - piece.getColumn() < 0)
+                n = -1;
+            else
+                n = 1;
+            for (int i = piece.getRow() + 1, j = piece.getColumn() + n; i < row ; i++, j += n) {
                 if (board[i][j] != null)
                     return false;
             }
