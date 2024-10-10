@@ -2,7 +2,6 @@ package com.github.bapachec.chessengine;
 import com.github.bapachec.chessengine.pieces.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class Board {
@@ -21,6 +20,7 @@ public class Board {
 
     public void populateBoard() {
 
+    /*
         for (int i = 0; i <8; i++) {
             Piece blackPawn = new Pawn(false, 1, i);
             BOARD[1][i] = blackPawn;
@@ -31,7 +31,7 @@ public class Board {
             whitePieceList.add(whitePawn);
 
         }
-
+    */
 
 
         //Rooks=============================================================
@@ -46,8 +46,8 @@ public class Board {
         BOARD[0][0] = blackRookPiece;
         blackRooks[0] = blackRookPiece;
 
-        blackRookPiece = new Rook(false, 0, 7);
-        BOARD[0][7] = blackRookPiece;
+        blackRookPiece = new Rook(false, 3, 2);
+        BOARD[3][2] = blackRookPiece;
         blackRooks[1] = blackRookPiece;
 
         //whiteRooks
@@ -84,8 +84,8 @@ public class Board {
         BOARD[7][1] = whiteKnight;
         whiteKnights[0] = whiteKnight;
 
-        whiteKnight = new Knight(true, 7, 6);
-        BOARD[7][6] = whiteKnight;
+        whiteKnight = new Knight(true, 4, 6);
+        BOARD[4][6] = whiteKnight;
         whiteKnights[1] = whiteKnight;
 
         Collections.addAll(blackPieceList, blackKnights);
@@ -114,8 +114,8 @@ public class Board {
         BOARD[7][2] = whiteBishop;
         whiteBishops[0] = whiteBishop;
 
-        whiteBishop = new Bishop(true, 7, 5);
-        BOARD[7][5] = whiteBishop;
+        whiteBishop = new Bishop(true, 4, 5);
+        BOARD[4][5] = whiteBishop;
         whiteBishops[1] = whiteBishop;
 
         Collections.addAll(blackPieceList, blackBishops);
@@ -221,7 +221,9 @@ public class Board {
 
         BOARD[location[0]][location[1]] = null;
         if (switchPieces) {
-            BOARD[location[0]][location[1]] = targetPiece;
+            //method for swapping rook with king
+            BOARD[row][col] = null;
+            col = castling(piece, targetPiece);
             friendlyPiece = true;
         }
         piece.setRow(row);
@@ -242,8 +244,6 @@ public class Board {
 
         lastPieceMoved = piece;
         whiteTurn = !whiteTurn;
-        //todo make a function that deals with checks and set the flag to false if player unchecks their king
-        //check function
         if (!checkFlag) {
             if (!whiteTurn) {
                 //black king
@@ -266,6 +266,25 @@ public class Board {
 
     }
 
+    private int castling(Piece King, Piece Rook) {
+    //BOARD[location[0]][location[1]] = targetPiece;
+        //if king castling with right rook
+        int new_col;
+        if (King.getColumn() < Rook.getColumn()) {
+            Rook.setColumn(5);
+            BOARD[Rook.getRow()][5] = Rook;
+            new_col = 6;
+        }
+        else {
+            Rook.setColumn(3);
+            BOARD[Rook.getRow()][3] = Rook;
+            new_col = 2;
+        }
+
+        return new_col;
+
+    }
+
     private Piece[][] boardCopyWithPieceMoved(byte[] location, Piece piece, int row, int col) {
         Piece[][] copyBoard = new Piece[8][8];
         for (int i = 0; i < 8; i++) {
@@ -273,8 +292,6 @@ public class Board {
                 copyBoard[i][j] = BOARD[i][j];
             }
         }
-        //todo make it so that everything is a deep copy including making new pieces
-        //switch? maybe?
 
         Piece new_piece = switch (piece.toString()) {
             case "P" -> new Pawn(piece.isWhite(), row, col);
@@ -429,7 +446,6 @@ public class Board {
                 return false;
         }
 
-        //todo finish rest of this
         //can remaining pieces block threat
         if (p == x) {
             //todo not completely correct, ex: knight
@@ -521,7 +537,6 @@ public class Board {
         return true;
     }
 
-    //todo bug: n+1 lookahead is overwriting attackingLine.
     public static class KingCheck {
 
         public static boolean isKingNotChecked(Piece[][] board, int row, int col) {
