@@ -20,7 +20,6 @@ public class Board {
 
     public void populateBoard() {
 
-    /*
         for (int i = 0; i <8; i++) {
             Piece blackPawn = new Pawn(false, 1, i);
             BOARD[1][i] = blackPawn;
@@ -31,7 +30,6 @@ public class Board {
             whitePieceList.add(whitePawn);
 
         }
-    */
 
 
         //Rooks=============================================================
@@ -46,8 +44,8 @@ public class Board {
         BOARD[0][0] = blackRookPiece;
         blackRooks[0] = blackRookPiece;
 
-        blackRookPiece = new Rook(false, 3, 2);
-        BOARD[3][2] = blackRookPiece;
+        blackRookPiece = new Rook(false, 0, 7);
+        BOARD[0][7] = blackRookPiece;
         blackRooks[1] = blackRookPiece;
 
         //whiteRooks
@@ -84,8 +82,8 @@ public class Board {
         BOARD[7][1] = whiteKnight;
         whiteKnights[0] = whiteKnight;
 
-        whiteKnight = new Knight(true, 4, 6);
-        BOARD[4][6] = whiteKnight;
+        whiteKnight = new Knight(true, 7, 6);
+        BOARD[7][6] = whiteKnight;
         whiteKnights[1] = whiteKnight;
 
         Collections.addAll(blackPieceList, blackKnights);
@@ -114,8 +112,8 @@ public class Board {
         BOARD[7][2] = whiteBishop;
         whiteBishops[0] = whiteBishop;
 
-        whiteBishop = new Bishop(true, 4, 5);
-        BOARD[4][5] = whiteBishop;
+        whiteBishop = new Bishop(true, 7, 5);
+        BOARD[7][5] = whiteBishop;
         whiteBishops[1] = whiteBishop;
 
         Collections.addAll(blackPieceList, blackBishops);
@@ -191,25 +189,58 @@ public class Board {
         //if (piece == null) not needed i think
         //    return false;
         Piece targetPiece = BOARD[row][col];
-        boolean switchPieces = false;
-        isTargetRook: {
-            if (targetPiece != null)
-                if (piece.isWhite() == targetPiece.isWhite()) {
-                    if (targetPiece instanceof Rook) {
-                        switchPieces = true;
-                        break isTargetRook;
-                    }
-                    return false;
-                }
-        }
 
+        boolean didCastling = false;
+
+        if (piece instanceof King) {
+            //todo make it so that one space before rook also counts and assigns targetPiece to the rook
+            //isTargetRook: {
+            if (((King) piece).getNotMoved()) {
+                if (row == 0 || row == 7) {
+                    if (col == 2) {
+                        col = 0;
+                        targetPiece = BOARD[row][0];
+                    }
+                    else if (col == 6) {
+                        col = 7;
+                        targetPiece = BOARD[row][7];
+                    }
+
+                }
+                if (targetPiece != null) {
+                    if (piece.isWhite() == targetPiece.isWhite()) {
+                        if (targetPiece instanceof Rook) {
+                            if (isCastlingValid(row, targetPiece.getColumn())) {
+                                didCastling = true;
+                                friendlyPiece = true;
+                            }
+                            else {
+                                return false;
+                            }
+
+                            //break isTargetRook;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            //}
+        }
 
         if (!piece.isLegalMove(BOARD, row, col))
             return false;
+
+        if (didCastling) {
+            col = castling(piece, targetPiece, row, targetPiece.getColumn());
+        }
         //could reduce both king ifs to one if but planning on highlighting the king in trouble
 
         //if (checkFlag) {
-        Piece[][] copyBoard = boardCopyWithPieceMoved(location, piece, row, col);
+        if (!didCastling) {
+            Piece[][] copyBoard = boardCopyWithPieceMoved(location, piece, row, col);
             if (!whiteTurn) {
                 if (blackKing_N1.isKingInCheck(copyBoard))
                     return false;
@@ -217,15 +248,16 @@ public class Board {
                 if (whiteKing_N1.isKingInCheck(copyBoard))
                     return false;
             }
-        //}
-
+            //}
+        }
         BOARD[location[0]][location[1]] = null;
-        if (switchPieces) {
+        /*if (switchPieces) {
             //method for swapping rook with king
             BOARD[row][col] = null;
             col = castling(piece, targetPiece);
             friendlyPiece = true;
-        }
+        }*/
+
         piece.setRow(row);
         piece.setColumn(col);
         BOARD[row][col] = piece;
@@ -266,21 +298,45 @@ public class Board {
 
     }
 
-    private int castling(Piece King, Piece Rook) {
+    private boolean isCastlingValid(int row, int col) {
+
+        //int kingCol = 4;
+        //castling right else left
+        if (4 < col) {
+            for (int i = 4; i < 7; i++) {
+                if (!Board.KingCheck.isKingNotChecked(BOARD, row , i)) {
+                    return false;
+                }
+            }
+
+        }
+        else {
+            for (int i = 4; i > 1; i--) {
+                if (!Board.KingCheck.isKingNotChecked(BOARD, row, i)) {
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
+    }
+
+    private int castling(Piece King, Piece Rook, int row, int col) {
     //BOARD[location[0]][location[1]] = targetPiece;
         //if king castling with right rook
         int new_col;
-        if (King.getColumn() < Rook.getColumn()) {
+        if (4 < Rook.getColumn()) {
             Rook.setColumn(5);
-            BOARD[Rook.getRow()][5] = Rook;
+            BOARD[row][5] = Rook;
             new_col = 6;
         }
         else {
             Rook.setColumn(3);
-            BOARD[Rook.getRow()][3] = Rook;
+            BOARD[row][3] = Rook;
             new_col = 2;
         }
-
+        BOARD[row][col] = null;
         return new_col;
 
     }

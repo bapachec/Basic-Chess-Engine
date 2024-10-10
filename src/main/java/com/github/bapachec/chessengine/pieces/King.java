@@ -16,14 +16,25 @@ public class King extends Piece {
 
         if (Math.abs(row - getRow()) > 1 || Math.abs(column - getColumn()) > 1) {
             if (board[row][column] instanceof Rook rook) {
-                if (isKingNotChecked(board, getRow(), getColumn()) && notMoved)
-                    return rook.getNotMoved() && isRowClear(board, this, column);
+                //if (isKingNotChecked(board, getRow(), getColumn()) && notMoved)
+                //could be removed?
+                if (notMoved) {
+                    if (rook.getNotMoved() && isRowClear(board, this, column)) {
+                        notMoved = false;
+                        return true;
+                    }
+                }
+
             }
 
             return false;
         }
         notMoved = false;
         return true;
+    }
+
+    public boolean getNotMoved() {
+        return notMoved;
     }
 
     //method for seeing if n+1 board is legal
