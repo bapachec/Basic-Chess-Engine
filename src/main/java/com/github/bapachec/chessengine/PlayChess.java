@@ -102,4 +102,30 @@ public class PlayChess implements UserInterface {
         return scan.nextInt();
 
     }
+
+    @Override
+    public void kingInCheckWarning(boolean isWhitesTurn) {
+        String player;
+        if (isWhitesTurn)
+            player = "White";
+        else
+            player = "Black";
+
+        System.out.println("The king is in check");
+        System.out.println(player + " should rescue their king!");
+    }
+
+    @Override
+    public void checkmate(boolean whiteWon, char[][] data) {
+
+        if (whiteWon) {
+            System.out.println("White checkmates Black. White Wins!");
+        }
+        else {
+            System.out.println("Black checkmates White. Black Wins!");
+        }
+        displayBoard(data);
+        System.exit(0);
+
+    }
 }

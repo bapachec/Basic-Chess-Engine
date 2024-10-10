@@ -6,4 +6,8 @@ public interface UserInterface {
 
     int promotionRequest();
 
+    void kingInCheckWarning(boolean isWhitesTurn);
+
+    void checkmate(boolean whiteWon, char[][] data);
+
 }
