@@ -234,7 +234,7 @@ public class Board {
             return false;
 
         if (didCastling) {
-            col = castling(piece, targetPiece, row, targetPiece.getColumn());
+            col = castling(targetPiece, row, targetPiece.getColumn());
         }
         //could reduce both king ifs to one if but planning on highlighting the king in trouble
 
@@ -276,22 +276,19 @@ public class Board {
 
         lastPieceMoved = piece;
         whiteTurn = !whiteTurn;
-        if (!checkFlag) {
-            if (!whiteTurn) {
-                //black king
-                if (!KingCheck.isKingNotChecked(BOARD, blackKing.getRow(), blackKing.getColumn())) {
-                    checkFlag = true;
-                }
-            }
-            else {
-                //white king
-                if (!KingCheck.isKingNotChecked(BOARD, whiteKing.getRow(), whiteKing.getColumn())) {
-                    checkFlag = true;
-                }
-            }
+        //if (!checkFlag) {
+        //can clean this part up by calling kings check method?
+        if (!whiteTurn) {
+            //black king
+            checkFlag = !KingCheck.isKingNotChecked(BOARD, blackKing.getRow(), blackKing.getColumn());
         }
-        else
-            checkFlag = false;
+        else {
+            //white king
+            checkFlag = !KingCheck.isKingNotChecked(BOARD, whiteKing.getRow(), whiteKing.getColumn());
+        }
+        //}
+        //else
+        //    checkFlag = false;
 
 
         return true;
@@ -322,7 +319,7 @@ public class Board {
         return true;
     }
 
-    private int castling(Piece King, Piece Rook, int row, int col) {
+    private int castling(Piece Rook, int row, int col) {
     //BOARD[location[0]][location[1]] = targetPiece;
         //if king castling with right rook
         int new_col;
