@@ -19,7 +19,6 @@ public class Board {
     private ArrayList<Piece> whitePieceList = new ArrayList<>();
 
     public void populateBoard() {
-
         for (int i = 0; i <8; i++) {
             Piece blackPawn = new Pawn(false, 1, i);
             BOARD[1][i] = blackPawn;
@@ -30,6 +29,7 @@ public class Board {
             whitePieceList.add(whitePawn);
 
         }
+
 
 
         //Rooks=============================================================
@@ -140,32 +140,6 @@ public class Board {
         whiteKing = new King(true, 7, 4);
         BOARD[7][4] =  whiteKing;
 
-        //this is for testing only, delete after=============================================================
-        //pawns to place
-        //Piece[] blackPawns = new Pawn[2];
-        //Piece[] whitePawns = new Pawn[3];
-        //Piece whitePawn;
-        //Piece blackPawn;
-
-        //blackPawn = new Pawn(false, 1, 3);
-        //BOARD[1][3] = blackPawn;
-        //blackPawns[0] = blackPawn;
-
-        //blackPawn = new Pawn(false, 1, 7);
-        //BOARD[1][7] = blackPawn;
-        //blackPawns[1] = blackPawn;
-
-        //whitePawn = new Pawn(true, 4, 2);
-        //BOARD[4][2] = whitePawn;
-        //whitePawns[0] = whitePawn;
-
-        //whitePawn = new Pawn(true, 4, 6);
-        //BOARD[4][6] = whitePawn;
-        //whitePawns[1] = whitePawn;
-
-        //Collections.addAll(blackPieceList, blackPawns);
-        //Collections.addAll(whitePieceList, whitePawns);
-        //this is for testing only, delete above=============================================================
     }
 
     //to check if chosen piece is player's color
@@ -250,6 +224,7 @@ public class Board {
             }
             //}
         }
+
         BOARD[location[0]][location[1]] = null;
         /*if (switchPieces) {
             //method for swapping rook with king
@@ -270,16 +245,19 @@ public class Board {
             }
         }
 
-        if (piece instanceof Pawn && (row == 0 || row == 7))
-            if ((piece.isWhite() && row == 0) || (!piece.isWhite() && row == 7))
-                promotionFlag = true;
-
+        if (piece instanceof Pawn) {
+            if (row == 0 || row == 7) {
+                if ((piece.isWhite() && row == 0) || (!piece.isWhite() && row == 7))
+                    promotionFlag = true;
+            }
+        }
         lastPieceMoved = piece;
         whiteTurn = !whiteTurn;
         //if (!checkFlag) {
         //can clean this part up by calling kings check method?
         if (!whiteTurn) {
             //black king
+
             checkFlag = !KingCheck.isKingNotChecked(BOARD, blackKing.getRow(), blackKing.getColumn());
         }
         else {
@@ -301,7 +279,7 @@ public class Board {
         //castling right else left
         if (4 < col) {
             for (int i = 4; i < 7; i++) {
-                if (!Board.KingCheck.isKingNotChecked(BOARD, row , i)) {
+                if (!KingCheck.isKingNotChecked(BOARD, row , i)) {
                     return false;
                 }
             }
@@ -309,7 +287,7 @@ public class Board {
         }
         else {
             for (int i = 4; i > 1; i--) {
-                if (!Board.KingCheck.isKingNotChecked(BOARD, row, i)) {
+                if (!KingCheck.isKingNotChecked(BOARD, row, i)) {
                     return false;
                 }
             }
@@ -499,9 +477,12 @@ public class Board {
                 return false;
         }
 
+        //early test case because knights cannot be blocked
+        if (lastPieceMoved instanceof Knight)
+            return true;
+        //todo this can be improved if the piece is adjacent to king, this means it cannot be blocked so searching is pointless
         //can remaining pieces block threat
         if (p == x) {
-            //todo not completely correct, ex: knight
             // if attacking piece is left of king
             if (q < y) {
                 for (Piece blockingPiece: defenderPieceList) {
@@ -663,9 +644,12 @@ public class Board {
             int i = 0;
             int j = 0;
             //(int i = row - 1, j = col - 1)
-            if (((i = row - 1) > 0)  && ((j = col - 1) > 0)) {
+            //if (((i = row - 1) > 0)  && ((j = col - 1) > 0)) {
+            i = row - 1;
+            j = col - 1;
+            Piece piece;
 
-                Piece piece;
+            if (i >= 0 && j-1 >= 0) {
                 if ((piece = board[i][j - 1]) instanceof Knight) {
                     if (piece.isWhite() != whiteTurn) {
                         //attackingLine = null;
@@ -673,69 +657,75 @@ public class Board {
                     }
 
                 }
-
+            }
+            if (i - 1 >= 0 && j >= 0) {
                 if ((piece = board[i - 1][j]) instanceof Knight) {
                     if (piece.isWhite() != whiteTurn) {
                         return false;
                     }
                 }
-
-
             }
 
             //top right
-            if (((i = row - 1) > 0) && ((j = col + 1) < 7)) {
 
-                Piece piece;
+            i = row - 1;
+            j = col + 1;
+            //Piece piece;
+            if (i >= 0 && j+1 <= 7) {
                 if ((piece = board[i][j + 1]) instanceof Knight) {
                     if (piece.isWhite() != whiteTurn) {
                         return false;
                     }
                 }
-
+            }
+            if (i-1 >= 0 && j <= 7) {
                 if ((piece = board[i - 1][j]) instanceof Knight) {
                     if (piece.isWhite() != whiteTurn) {
                         return false;
                     }
                 }
-
             }
 
-            //bottom left
-            if (((i = row + 1) < 7) && ((j = col - 1) > 0)) {
 
-                Piece piece;
+            //bottom left
+
+            i = row + 1;
+            j = col - 1;
+            if (i <= 7 && j-1 >= 0) {
                 if ((piece = board[i][j - 1]) instanceof Knight) {
                     if (piece.isWhite() != whiteTurn) {
                         return false;
                     }
                 }
-
+            }
+            if (i+1 <= 7 && j >= 0) {
                 if ((piece = board[i + 1][j]) instanceof Knight) {
                     if (piece.isWhite() != whiteTurn) {
                         return false;
                     }
                 }
-
             }
 
-            //bottom right
-            if (((i = row + 1) < 7) && ((j = col + 1) < 7)) {
 
-                Piece piece;
+            //bottom right
+
+            i = row + 1;
+            j = col + 1;
+            if (i <= 7 && j+1 <= 7) {
                 if ((piece = board[i][j + 1]) instanceof Knight) {
                     if (piece.isWhite() != whiteTurn) {
                         return false;
                     }
                 }
-
+            }
+            if (i+1 <= 7 && j <= 7) {
                 if ((piece = board[i + 1][j]) instanceof Knight) {
                     if (piece.isWhite() != whiteTurn) {
                         return false;
                     }
                 }
-
             }
+
 
             return true;
         }

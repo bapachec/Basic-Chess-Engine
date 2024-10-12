@@ -18,12 +18,14 @@ public class Rook extends Piece {
         if (rowAbs != 0 && colAbs != 0)
             return false;
 
-        if (rowAbs == 0)
+        if (rowAbs == 0) {
             if (!isRowClear(board, this, column))
                 return false;
-            //return (isRowClear(board, this, column));
-        else if (!isColClear(board, this, row))
+        } else if (!isColClear(board, this, row)) {
             return false;
+        }
+            //return (isRowClear(board, this, column));
+
 
         notMoved = false;
         return true;

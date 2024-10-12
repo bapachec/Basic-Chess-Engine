@@ -1,5 +1,7 @@
 package com.github.bapachec.chessengine.pieces;
 
+import com.github.bapachec.chessengine.Board;
+
 public class Pawn extends Piece{
 
     private boolean isFirstMove = true;
@@ -54,6 +56,10 @@ public class Pawn extends Piece{
                 isFirstMove = false;
                 return true;
             }
+            return false;
+        }
+
+        if (board[row][column] != null) {
             return false;
         }
 
