@@ -1,10 +1,12 @@
 package com.github.bapachec.chessengine;
 
 public class Main {
-    public static void main (String[] args) {
-        UserInterface cli = new PlayChess();
-        ChessEngine engine = new ChessEngine(cli);
-        cli.run(engine);
 
+    public static void main (String[] args) {
+        ChessEngine engine = new ChessEngine();
+
+        PlayChess playChess = new PlayChess(engine);
+
+        playChess.run();
     }
 }

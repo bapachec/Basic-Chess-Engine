@@ -143,7 +143,7 @@ public class Board {
     }
 
     //to check if chosen piece is player's color
-    public boolean samePiece(byte[] location, boolean isWhitesTurn) {
+    public boolean samePiece(int[] location, boolean isWhitesTurn) {
         Piece piece = BOARD[location[0]][location[1]];
         if (piece == null)
             return false;
@@ -157,7 +157,7 @@ public class Board {
     }
 
 
-    public boolean movePiece(byte[] location, int row, int col) {
+    public boolean movePiece(int[] location, int row, int col) {
         boolean friendlyPiece = false;
         Piece piece = BOARD[location[0]][location[1]];
         //if (piece == null) not needed i think
@@ -316,7 +316,7 @@ public class Board {
 
     }
 
-    private Piece[][] boardCopyWithPieceMoved(byte[] location, Piece piece, int row, int col) {
+    private Piece[][] boardCopyWithPieceMoved(int[] location, Piece piece, int row, int col) {
         Piece[][] copyBoard = new Piece[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {

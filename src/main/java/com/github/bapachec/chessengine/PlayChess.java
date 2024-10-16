@@ -4,20 +4,27 @@ import java.util.Scanner;
 
 public class PlayChess implements UserInterface {
     Scanner scan = new Scanner(System.in);
+    ChessEngine engine;
+
+    public PlayChess(ChessEngine engine) {
+        this.engine = engine;
+        engine.addListener(this);
+    }
+
     @Override
-    public void run (ChessEngine engine) {
+    public void run () {
 
 
         boolean stop = false;
         engine.start();
-        byte[] piece_location = new byte[2];
+        int[] piece_location = new int[2];
         byte row, col;
 
         while(!stop) {
 
             try {
                 while(true) {
-                    displayBoard(engine.boardData());
+                    //onBoardUpdated(engine.boardData());
                     //check player's turn
                     if (engine.isWhitesTurn())
                         System.out.println("It is whites Turn");
@@ -80,8 +87,8 @@ public class PlayChess implements UserInterface {
     }
 
 
-
-    public static void displayBoard(char[][] board) {
+    @Override
+    public void onBoardUpdated(char[][] board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++)
                 System.out.print(board[i][j]);
@@ -124,7 +131,7 @@ public class PlayChess implements UserInterface {
         else {
             System.out.println("Black checkmates White. Black Wins!");
         }
-        displayBoard(data);
+//        onBoardUpdated(data);
         System.exit(0);
 
     }

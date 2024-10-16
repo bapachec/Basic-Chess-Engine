@@ -2,12 +2,14 @@ package com.github.bapachec.chessengine;
 
 public interface UserInterface {
 
-    void run(ChessEngine engine);
+    void run();
 
     int promotionRequest();
 
     void kingInCheckWarning(boolean isWhitesTurn);
 
     void checkmate(boolean whiteWon, char[][] data);
+
+    void onBoardUpdated(char[][] boardData);
 
 }
