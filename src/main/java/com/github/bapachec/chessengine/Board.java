@@ -157,8 +157,20 @@ public class Board {
         }
     }
 
+    private boolean samePiece(Position pickedSpace) {
+        int row = pickedSpace.row();
+        int col = pickedSpace.col();
+        Piece piece = BOARD[row][col];
+        if (piece == null)
+            return false;
+
+        return piece.isWhite() == whiteTurn;
+    }
 
     public boolean movePiece(Position start, Position target) {
+        if (!samePiece(start)) {
+            return false;
+        }
         boolean friendlyPiece = false;
         Piece piece = BOARD[start.row()][start.col()];
         int targetRow = target.row();
