@@ -1,7 +1,5 @@
 package com.github.bapachec.chessengine.pieces;
 
-import static com.github.bapachec.chessengine.Board.KingCheck.isKingNotChecked;
-
 public class King extends Piece {
     private boolean notMoved = true;
 
@@ -16,7 +14,7 @@ public class King extends Piece {
 
         if (Math.abs(row - getRow()) > 1 || Math.abs(column - getColumn()) > 1) {
             if (board[row][column] instanceof Rook rook) {
-                //if (isKingNotChecked(board, getRow(), getColumn()) && notMoved)
+                //if (isKingNotInCheck(board, getRow(), getColumn()) && notMoved)
                 //could be removed?
                 if (notMoved) {
                     if (rook.getNotMoved() && isRowClear(board, this, column)) {
@@ -38,10 +36,11 @@ public class King extends Piece {
     }
 
     //method for seeing if n+1 board is legal
-    public boolean isKingInCheck(Piece[][] board) {
-        return !isKingNotChecked(board, getRow(), getColumn());
+    /*
+    public boolean isKingInCheck(Piece[][] board, boolean whiteTurn) {
+        return !isKingNotInCheck(board, getRow(), getColumn(), whiteTurn);
     }
-
+    */
     @Override
     public String toString() { return "K"; }
 }

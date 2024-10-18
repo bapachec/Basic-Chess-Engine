@@ -1,12 +1,19 @@
 package com.github.bapachec.chessengine;
 
+import com.github.bapachec.chessengine.Position.Position;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChessEngine {
     private List<UserInterface> listeners = new ArrayList<>();
     Board board = new Board();
     private boolean whitesTurn = true;
+
+    private static final Map<Character, Integer> columnMap = Map.of(
+            'a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7
+    );
 
     public void addListener(UserInterface listener) {
         listeners.add(listener);
@@ -54,20 +61,32 @@ public class ChessEngine {
         evokeListenersOnStart();
     }
 
-    public boolean validPiece(int[] piece_location) {
-        return board.samePiece(piece_location, whitesTurn);
+    public boolean validPiece(int row, int col) {
+        return board.samePiece(row, col, whitesTurn);
+    }
+
+    public boolean validPiece(String selectedPosition) {
+        char colChar = selectedPosition.charAt(0);
+        int col = columnMap.get(colChar);
+        int row = Character.getNumericValue(selectedPosition.charAt(1));
+        row = 8 - row;
+
+        return board.samePiece(row, col, whitesTurn);
+
     }
 
     //todo make this a boolean and if valid move, true otherwise false
-    public void makeMove(int[] piece_location, int new_row, int new_col) {
-        if (!board.movePiece(piece_location, new_row, new_col)) {
+    public boolean makeMove(int startRow, int startCol, int targetRow, int targetCol) {
+        Position start = new Position(startRow, startCol);
+        Position target = new Position(targetRow, targetCol);
+        if (!board.movePiece(start, target)) {
             evokeListenersOnIllegalMove();
             /*
             if (board.getCheckFlag()) {
                 ui.kingInCheckWarning(whitesTurn);
             }
              */
-            return;
+            return false;
         }
 
         /*
@@ -88,7 +107,21 @@ public class ChessEngine {
         }
         */
         evokeListeners();
+        return true;
+    }
 
+    public boolean makeMove(String start, String end) {
+        char colChar = start.charAt(0);
+        int startCol = columnMap.get(colChar);
+        int startRow = Character.getNumericValue(start.charAt(1));
+        startRow = 8 - startRow;
+
+        colChar = end.charAt(0);
+        int targetCol = columnMap.get(colChar);
+        int targetRow = Character.getNumericValue(end.charAt(1));
+        targetRow = 8 - targetRow;
+
+        return makeMove(startRow, startCol, targetRow, targetCol);
     }
 
 /*    public void promotionChoice(int choice) {

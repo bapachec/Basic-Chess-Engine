@@ -1,12 +1,13 @@
 package com.github.bapachec.chessengine;
+import com.github.bapachec.chessengine.Position.Position;
 import com.github.bapachec.chessengine.pieces.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Board {
-    private static final Piece[][] BOARD = new Piece[8][8];
-    private static boolean whiteTurn = true;
+    private final Piece[][] BOARD = new Piece[8][8];
+    private boolean whiteTurn = true;
     private boolean promotionFlag = false;
     private boolean checkFlag = false;
     private Piece lastPieceMoved = null;
@@ -143,8 +144,8 @@ public class Board {
     }
 
     //to check if chosen piece is player's color
-    public boolean samePiece(int[] location, boolean isWhitesTurn) {
-        Piece piece = BOARD[location[0]][location[1]];
+    public boolean samePiece(int row, int col, boolean isWhitesTurn) {
+        Piece piece = BOARD[row][col];
         if (piece == null)
             return false;
 
@@ -157,12 +158,15 @@ public class Board {
     }
 
 
-    public boolean movePiece(int[] location, int row, int col) {
+    public boolean movePiece(Position start, Position target) {
         boolean friendlyPiece = false;
-        Piece piece = BOARD[location[0]][location[1]];
+        Piece piece = BOARD[start.row()][start.col()];
+        int targetRow = target.row();
+        int targetCol = target.col();
+
         //if (piece == null) not needed i think
         //    return false;
-        Piece targetPiece = BOARD[row][col];
+        Piece targetPiece = BOARD[target.row()][target.row()];
 
         boolean didCastling = false;
 
@@ -170,21 +174,21 @@ public class Board {
             //todo make it so that one space before rook also counts and assigns targetPiece to the rook
             //isTargetRook: {
             if (((King) piece).getNotMoved()) {
-                if (row == 0 || row == 7) {
-                    if (col == 2) {
-                        col = 0;
-                        targetPiece = BOARD[row][0];
+                if (targetRow == 0 || targetRow == 7) {
+                    if (targetCol == 2) {
+                        targetCol = 0;
+                        targetPiece = BOARD[targetRow][0];
                     }
-                    else if (col == 6) {
-                        col = 7;
-                        targetPiece = BOARD[row][7];
+                    else if (targetCol == 6) {
+                        targetCol = 7;
+                        targetPiece = BOARD[targetRow][7];
                     }
 
                 }
                 if (targetPiece != null) {
                     if (piece.isWhite() == targetPiece.isWhite()) {
                         if (targetPiece instanceof Rook) {
-                            if (isCastlingValid(row, targetPiece.getColumn())) {
+                            if (isCastlingValid(targetRow, targetPiece.getColumn())) {
                                 didCastling = true;
                                 friendlyPiece = true;
                             }
@@ -204,28 +208,30 @@ public class Board {
             //}
         }
 
-        if (!piece.isLegalMove(BOARD, row, col))
+        if (!piece.isLegalMove(BOARD, targetRow, targetCol))
             return false;
 
         if (didCastling) {
-            col = castling(targetPiece, row, targetPiece.getColumn());
+            targetCol = castling(targetPiece, targetRow, targetPiece.getColumn());
         }
         //could reduce both king ifs to one if but planning on highlighting the king in trouble
 
         //if (checkFlag) {
         if (!didCastling) {
-            Piece[][] copyBoard = boardCopyWithPieceMoved(location, piece, row, col);
+            Piece[][] copyBoard = boardCopyWithPieceMoved(start, piece, target);
             if (!whiteTurn) {
-                if (blackKing_N1.isKingInCheck(copyBoard))
+                //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                if (!KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
                     return false;
             } else {
-                if (whiteKing_N1.isKingInCheck(copyBoard))
+                //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                if (!KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
                     return false;
             }
             //}
         }
 
-        BOARD[location[0]][location[1]] = null;
+        BOARD[start.row()][start.col()] = null;
         /*if (switchPieces) {
             //method for swapping rook with king
             BOARD[row][col] = null;
@@ -233,9 +239,9 @@ public class Board {
             friendlyPiece = true;
         }*/
 
-        piece.setRow(row);
-        piece.setColumn(col);
-        BOARD[row][col] = piece;
+        piece.setRow(targetRow);
+        piece.setColumn(targetCol);
+        BOARD[targetRow][targetCol] = piece;
         if (!friendlyPiece) {
             if (targetPiece != null) {
                 if (!targetPiece.isWhite())
@@ -246,8 +252,8 @@ public class Board {
         }
 
         if (piece instanceof Pawn) {
-            if (row == 0 || row == 7) {
-                if ((piece.isWhite() && row == 0) || (!piece.isWhite() && row == 7))
+            if (targetRow == 0 || targetRow == 7) {
+                if ((piece.isWhite() && targetRow == 0) || (!piece.isWhite() && targetRow == 7))
                     promotionFlag = true;
             }
         }
@@ -258,11 +264,11 @@ public class Board {
         if (!whiteTurn) {
             //black king
 
-            checkFlag = !KingCheck.isKingNotChecked(BOARD, blackKing.getRow(), blackKing.getColumn());
+            checkFlag = !KingCheck.isKingNotInCheck(BOARD, blackKing.getRow(), blackKing.getColumn(), whiteTurn);
         }
         else {
             //white king
-            checkFlag = !KingCheck.isKingNotChecked(BOARD, whiteKing.getRow(), whiteKing.getColumn());
+            checkFlag = !KingCheck.isKingNotInCheck(BOARD, whiteKing.getRow(), whiteKing.getColumn(), whiteTurn);
         }
         //}
         //else
@@ -279,7 +285,7 @@ public class Board {
         //castling right else left
         if (4 < col) {
             for (int i = 4; i < 7; i++) {
-                if (!KingCheck.isKingNotChecked(BOARD, row , i)) {
+                if (!KingCheck.isKingNotInCheck(BOARD, row , i, whiteTurn)) {
                     return false;
                 }
             }
@@ -287,7 +293,7 @@ public class Board {
         }
         else {
             for (int i = 4; i > 1; i--) {
-                if (!KingCheck.isKingNotChecked(BOARD, row, i)) {
+                if (!KingCheck.isKingNotInCheck(BOARD, row, i, whiteTurn)) {
                     return false;
                 }
             }
@@ -316,7 +322,9 @@ public class Board {
 
     }
 
-    private Piece[][] boardCopyWithPieceMoved(int[] location, Piece piece, int row, int col) {
+    private Piece[][] boardCopyWithPieceMoved(Position start, Piece piece, Position target) {
+        int row = target.row();
+        int col = target.col();
         Piece[][] copyBoard = new Piece[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -352,7 +360,7 @@ public class Board {
             whiteKing_N1 = whiteKing;
         }
 
-        copyBoard[location[0]][location[1]] = null;
+        copyBoard[start.row()][start.col()] = null;
         return copyBoard;
     }
 
@@ -458,7 +466,8 @@ public class Board {
                     continue;
             King futureKing = new King(trappedKing.isWhite(), space[0], space[1]);
             boardCopy[space[0]][space[1]] = futureKing;
-            if(!futureKing.isKingInCheck(boardCopy))
+            //if(!futureKing.isKingInCheck(boardCopy, whiteTurn))
+            if (KingCheck.isKingNotInCheck(boardCopy, futureKing.getRow(), futureKing.getColumn(), whiteTurn))
                 return false;
             boardCopy[space[0]][space[1]] = holdPiece;
         }
@@ -573,7 +582,7 @@ public class Board {
 
     public static class KingCheck {
 
-        public static boolean isKingNotChecked(Piece[][] board, int row, int col) {
+        public static boolean isKingNotInCheck(Piece[][] board, int row, int col, boolean whiteTurn) {
             //row
             for (int i = 0; i < 8; i++) {
                 Piece piece = board[row][i];

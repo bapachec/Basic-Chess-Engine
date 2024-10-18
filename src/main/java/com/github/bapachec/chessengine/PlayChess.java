@@ -17,8 +17,8 @@ public class PlayChess implements UserInterface {
 
         boolean stop = false;
         engine.start();
-        int[] piece_location = new int[2];
-        byte row, col;
+        //int[] piece_location = new int[2];
+        int startRow, startCol, targetRow, targetCol;
 
         while(!stop) {
 
@@ -36,10 +36,10 @@ public class PlayChess implements UserInterface {
                     //pick a piece
                     System.out.println("Pick which piece you want to move.");
                     System.out.print("Row: ");
-                    piece_location[0] = scan.nextByte();
+                    startRow = scan.nextByte();
                     System.out.print("Col: ");
-                    piece_location[1] = scan.nextByte();
-                    if (!engine.validPiece(piece_location)) {
+                    startCol = scan.nextByte();
+                    if (!engine.validPiece(startRow, startCol)) {
                         System.out.println("Not your piece");
                         continue;
                     }
@@ -49,12 +49,12 @@ public class PlayChess implements UserInterface {
                     //make a move
                     System.out.println("Pick new location for your chosen piece");
                     System.out.print("New Row: ");
-                    row = scan.nextByte();
+                    targetRow = scan.nextByte();
                     System.out.print("New Col: ");
-                    col = scan.nextByte();
-                    System.out.println("Row: " + row + " Col: " + col);
+                    targetCol = scan.nextByte();
+                    System.out.println("Row: " + targetRow + " Col: " + targetCol);
 
-                    engine.makeMove(piece_location, row, col);
+                    engine.makeMove(startRow, startCol, targetRow, targetCol);
                     scan.nextLine(); //clears input buffer
 
                     /*
