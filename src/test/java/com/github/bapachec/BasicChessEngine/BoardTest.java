@@ -44,12 +44,31 @@ public class BoardTest {
         assertTrue(result, "White should be able to select f2 pawn");
         result = engine.makeMove("f2", "f4");
         assertTrue(result, "white should be able to move f2 pawn to f4");
+        //Board state after white turn
+        char[][] expectedBoardAfterWhiteTurn = {
+                {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
+                {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+                {'_', '_', '_', '_', '_', '_', '_', '_'},
+                {'_', '_', '_', '_', '_', '_', '_', '_'},
+                {'_', '_', '_', '_', '_', 'P', '_', '_'},
+                {'_', '_', '_', '_', '_', '_', '_', '_'},
+                {'P', 'P', 'P', 'P', 'P', '_', 'P', 'P'},
+                {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
+        };
+        assertArrayEquals(expectedBoardAfterWhiteTurn, engine.boardData());
+        verify(mockUIListener).onBoardUpdated(eq(expectedBoardAfterWhiteTurn));
     }
 
     @Test
     void testBlackCannotMoveFirst() {
+        boolean result = engine.makeMove("b7", "e7");
+        assertFalse(result, "Black should not be able to move because it is not their turn");
+    }
+
+    @Test
+    void testWhiteCannotPickBlackPiece() {
         boolean result = engine.validPiece("b7");
-        assertFalse(result, "Black should not be able to select b7 because it's not their turn");
+        assertFalse(result, "White should not be able to select b7 because it's not their color");
     }
 
     @Test
@@ -72,6 +91,7 @@ public class BoardTest {
                 {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
         };
         assertArrayEquals(expectedBoardAfterWhiteTurn, engine.boardData());
+        verify(mockUIListener).onBoardUpdated(eq(expectedBoardAfterWhiteTurn));
 
         //Black Turn
         result = engine.validPiece("d7");
@@ -90,6 +110,7 @@ public class BoardTest {
                 {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
         };
         assertArrayEquals(expectedBoardAfterBlackTurn, engine.boardData());
+        verify(mockUIListener).onBoardUpdated(eq(expectedBoardAfterBlackTurn));
 
         //White turn again
         result = engine.validPiece("d2");
