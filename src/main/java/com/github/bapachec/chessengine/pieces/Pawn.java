@@ -19,6 +19,16 @@ public class Pawn extends Piece{
         if (!super.isLegalMove(board, row, column))
             return false;
 
+        if (!isWhite()) {
+            if (row - getRow() < 0)
+                return false;
+
+        }
+        else {
+            if (getRow() - row < 0)
+                return false;
+        }
+
         int rowAbs = Math.abs(row - getRow());
         int colAbs = Math.abs(column - getColumn());
 
@@ -46,6 +56,11 @@ public class Pawn extends Piece{
 
         }
 
+        //blocked
+        if (board[row][column] != null) {
+            return false;
+        }
+
         //if move is more than one column
         if (colAbs >= 1)
             return false;
@@ -59,9 +74,6 @@ public class Pawn extends Piece{
             return false;
         }
 
-        if (board[row][column] != null) {
-            return false;
-        }
 
         isFirstMove = false;
         return true;
