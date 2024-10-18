@@ -10,6 +10,7 @@ public class ChessEngine {
     private List<UserInterface> listeners = new ArrayList<>();
     Board board = new Board();
     private boolean whitesTurn = true;
+    private boolean gameOver = false;
 
     private static final Map<Character, Integer> columnMap = Map.of(
             'a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7
@@ -31,8 +32,9 @@ public class ChessEngine {
                 board.pawnPromotion(listener.promotionRequest());
             if (board.getCheckFlag()) {
                 if (board.isCheckMate()) {
-                    listener.onBoardUpdated(boardData());
-                    listener.checkmate(!whitesTurn, boardData());
+                    gameOver = true;
+                    //listener.onBoardUpdated(boardData());
+                    listener.checkmate(!whitesTurn);
                 }
                 listener.kingInCheckWarning(whitesTurn);
             }
@@ -55,6 +57,8 @@ public class ChessEngine {
     public boolean isWhitesTurn() {
         return whitesTurn;
     }
+
+    public boolean isGameOver() { return gameOver; }
 
     public void start() {
         board.populateBoard();

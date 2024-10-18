@@ -8,7 +8,7 @@ public interface UserInterface {
 
     void kingInCheckWarning(boolean isWhitesTurn);
 
-    void checkmate(boolean whiteWon, char[][] data);
+    void checkmate(boolean whiteWon);
 
     void onBoardUpdated(char[][] boardData);
 

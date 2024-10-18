@@ -20,7 +20,7 @@ public class PlayChess implements UserInterface {
         //int[] piece_location = new int[2];
         int startRow, startCol, targetRow, targetCol;
 
-        while(!stop) {
+        while(!engine.isGameOver()) {
 
             try {
                 while(true) {
@@ -123,7 +123,7 @@ public class PlayChess implements UserInterface {
     }
 
     @Override
-    public void checkmate(boolean whiteWon, char[][] data) {
+    public void checkmate(boolean whiteWon) {
 
         if (whiteWon) {
             System.out.println("White checkmates Black. White Wins!");
@@ -131,8 +131,6 @@ public class PlayChess implements UserInterface {
         else {
             System.out.println("Black checkmates White. Black Wins!");
         }
-//        onBoardUpdated(data);
-        System.exit(0);
 
     }
 }
