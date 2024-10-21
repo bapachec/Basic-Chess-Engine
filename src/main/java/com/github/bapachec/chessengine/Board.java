@@ -178,7 +178,7 @@ public class Board {
 
         //if (piece == null) not needed i think
         //    return false;
-        Piece targetPiece = BOARD[target.row()][target.row()];
+        Piece targetPiece = BOARD[targetRow][targetCol];
 
         boolean didCastling = false;
 
@@ -493,9 +493,23 @@ public class Board {
             defenderPieceList = whitePieceList;
 
         //can any remaining pieces eliminate threat
+
         for (Piece counterPiece: defenderPieceList) {
-            if (counterPiece.isLegalMove(BOARD, p, q))
-                return false;
+            if (counterPiece.isLegalMove(BOARD, p, q)) {
+                Position target = new Position(p, q);
+                Position start = new Position(counterPiece.getRow(), counterPiece.getColumn());
+                Piece[][] copyBoard = boardCopyWithPieceMoved(start, counterPiece, target);
+                if (!whiteTurn) {
+                    //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                    if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
+                        return false;
+                } else {
+                    //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                    if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
+                        return false;
+                }
+                //return false
+            }
         }
 
         //early test case because knights cannot be blocked
@@ -509,7 +523,19 @@ public class Board {
                 for (Piece blockingPiece: defenderPieceList) {
                     for (int i = q + 1; i < y; i++) {
                         if (blockingPiece.isLegalMove(BOARD, p, i)) {
-                            return false;
+                            Position target = new Position(p, i);
+                            Position start = new Position(blockingPiece.getRow(), blockingPiece.getColumn());
+                            Piece[][] copyBoard = boardCopyWithPieceMoved(start, blockingPiece, target);
+                            if (!whiteTurn) {
+                                //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                                if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
+                                    return false;
+                            } else {
+                                //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                                if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
+                                    return false;
+                            }
+                            //return false;
                         }
                     }
                 }
@@ -519,7 +545,19 @@ public class Board {
                 for (Piece blockingPiece: defenderPieceList) {
                     for (int i = q - 1; i > y; i--) {
                         if (blockingPiece.isLegalMove(BOARD, p, i)) {
-                            return false;
+                            Position target = new Position(p, i);
+                            Position start = new Position(blockingPiece.getRow(), blockingPiece.getColumn());
+                            Piece[][] copyBoard = boardCopyWithPieceMoved(start, blockingPiece, target);
+                            if (!whiteTurn) {
+                                //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                                if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
+                                    return false;
+                            } else {
+                                //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                                if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
+                                    return false;
+                            }
+                            //return false;
                         }
                     }
                 }
@@ -536,7 +574,19 @@ public class Board {
                     }
                     for (int i = p + 1; i < x; i++) {
                         if (blockingPiece.isLegalMove(BOARD, i, q)) {
-                            return false;
+                            Position target = new Position(i, q);
+                            Position start = new Position(blockingPiece.getRow(), blockingPiece.getColumn());
+                            Piece[][] copyBoard = boardCopyWithPieceMoved(start, blockingPiece, target);
+                            if (!whiteTurn) {
+                                //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                                if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
+                                    return false;
+                            } else {
+                                //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                                if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
+                                    return false;
+                            }
+                            //return false;
                         }
                     }
                 }
@@ -548,7 +598,19 @@ public class Board {
                     }
                     for (int i = p - 1; i > x; i--) {
                         if (blockingPiece.isLegalMove(BOARD, i, q)) {
-                            return false;
+                            Position target = new Position(i, q);
+                            Position start = new Position(blockingPiece.getRow(), blockingPiece.getColumn());
+                            Piece[][] copyBoard = boardCopyWithPieceMoved(start, blockingPiece, target);
+                            if (!whiteTurn) {
+                                //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                                if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
+                                    return false;
+                            } else {
+                                //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                                if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
+                                    return false;
+                            }
+                            //return false;
                         }
                     }
                 }
@@ -581,7 +643,19 @@ public class Board {
             for (Piece blockingPiece: defenderPieceList) {
                 for (i = x + r, j = y + c; i != p && j != q; i+= r, j += c) {
                     if (blockingPiece.isLegalMove(BOARD, i, j)) {
-                        return false;
+                        Position target = new Position(i, j);
+                        Position start = new Position(blockingPiece.getRow(), blockingPiece.getColumn());
+                        Piece[][] copyBoard = boardCopyWithPieceMoved(start, blockingPiece, target);
+                        if (!whiteTurn) {
+                            //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                            if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
+                                return false;
+                        } else {
+                            //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
+                            if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
+                                return false;
+                        }
+                        //return false;
                     }
                 }
             }
