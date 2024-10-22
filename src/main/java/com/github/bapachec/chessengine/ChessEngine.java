@@ -65,6 +65,11 @@ public class ChessEngine {
         evokeListenersOnStart();
     }
 
+    public void start(char[][] customBoard) {
+        board.customPopulateBoard(customBoard);
+        evokeListenersOnStart();
+    }
+
     public boolean validPiece(int row, int col) {
         return board.samePiece(row, col, whitesTurn);
     }

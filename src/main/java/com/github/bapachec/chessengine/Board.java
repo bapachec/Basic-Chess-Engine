@@ -4,6 +4,8 @@ import com.github.bapachec.chessengine.pieces.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Board {
     private final Piece[][] BOARD = new Piece[8][8];
@@ -18,6 +20,67 @@ public class Board {
     private King whiteKing_N1;
     private ArrayList<Piece> blackPieceList = new ArrayList<>();
     private ArrayList<Piece> whitePieceList = new ArrayList<>();
+
+    public void customPopulateBoard(char[][] board) {
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                char spot = board[i][j];
+                if (Character.isLetter(spot)) {
+                    if (Character.isUpperCase(spot)) {
+                        createWhitePiece(spot, i, j);
+                    }
+                    else if (Character.isLowerCase(spot)) {
+                        createBlackPiece(spot, i, j);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void createWhitePiece(char pieceChar, int row, int col) {
+
+        Piece new_piece = switch (pieceChar) {
+            case 'P' -> new Pawn(true, row, col);
+            case 'R' -> new Rook(true, row, col);
+            case 'N' -> new Knight(true, row, col);
+            case 'B' -> new Bishop(true, row, col);
+            case 'Q' -> new Queen(true, row, col);
+            case 'K' -> new King(true, row, col);
+            default -> throw new IllegalStateException("Unexpected Error");
+        };
+
+        if (!(new_piece instanceof King)) {
+            whitePieceList.add(new_piece);
+        }
+        else {
+            whiteKing = (King) new_piece;
+        }
+
+        BOARD[row][col] = new_piece;
+    }
+
+    private void createBlackPiece(char pieceChar, int row, int col) {
+
+        Piece new_piece = switch (pieceChar) {
+            case 'p' -> new Pawn(false, row, col);
+            case 'r' -> new Rook(false, row, col);
+            case 'n' -> new Knight(false, row, col);
+            case 'b' -> new Bishop(false, row, col);
+            case 'q' -> new Queen(false, row, col);
+            case 'k' -> new King(false, row, col);
+            default -> throw new IllegalStateException("Unexpected Error");
+        };
+
+        if (!(new_piece instanceof King)) {
+            blackPieceList.add(new_piece);
+        }
+        else {
+            blackKing = (King) new_piece;
+        }
+        BOARD[row][col] = new_piece;
+    }
 
     public void populateBoard() {
         for (int i = 0; i <8; i++) {
