@@ -4,8 +4,6 @@ import com.github.bapachec.chessengine.pieces.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Board {
     private final Piece[][] BOARD = new Piece[8][8];
@@ -13,7 +11,6 @@ public class Board {
     private boolean promotionFlag = false;
     private boolean checkFlag = false;
     private Piece lastPieceMoved = null;
-    //private static LineOfAttack attackingLine;
     private King blackKing;
     private King whiteKing;
     private King blackKing_N1;
@@ -246,7 +243,6 @@ public class Board {
         boolean didCastling = false;
 
         if (piece instanceof King) {
-            //todo make it so that one space before rook also counts and assigns targetPiece to the rook
             //isTargetRook: {
             if (((King) piece).getNotMoved()) {
                 if (targetRow == 0 || targetRow == 7) {
@@ -279,8 +275,16 @@ public class Board {
                     }
                 }
             }
+            else if (targetPiece != null) {
+                if (piece.isWhite() == targetPiece.isWhite())
+                    return false;
+            }
 
             //}
+        }
+        else if (targetPiece != null) {
+            if (piece.isWhite() == targetPiece.isWhite())
+                return false;
         }
 
         if (!piece.isLegalMove(BOARD, targetRow, targetCol))
@@ -532,7 +536,6 @@ public class Board {
                 continue;
             //on same row
             //on same col
-            //todo bug on this if, ex: knight checking king is preventing king from moving on the row that the knight is from.
             //if (space[0] == p || space[1] == q)
             //    continue;
             Piece holdPiece = BOARD[space[0]][space[1]];

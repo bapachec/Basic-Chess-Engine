@@ -2,7 +2,6 @@ package com.github.bapachec.chessengine;
 
 import com.github.bapachec.chessengine.Position.Position;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,6 @@ public class ChessEngine {
             if (board.getCheckFlag()) {
                 if (board.isCheckMate()) {
                     gameOver = true;
-                    //listener.onBoardUpdated(boardData());
                     listener.checkmate(!whitesTurn);
                 }
                 listener.kingInCheckWarning(whitesTurn);
@@ -50,7 +48,6 @@ public class ChessEngine {
                 listener.kingInCheckWarning(whitesTurn);
             }
 
-            //illegalMove method
         }
     }
 
@@ -84,37 +81,15 @@ public class ChessEngine {
 
     }
 
-    //todo make this a boolean and if valid move, true otherwise false
     public boolean makeMove(int startRow, int startCol, int targetRow, int targetCol) {
         Position start = new Position(startRow, startCol);
         Position target = new Position(targetRow, targetCol);
         if (!board.movePiece(start, target)) {
             evokeListenersOnIllegalMove();
-            /*
-            if (board.getCheckFlag()) {
-                ui.kingInCheckWarning(whitesTurn);
-            }
-             */
             return false;
         }
 
-        /*
-        if (board.getPromotionFlag())
-            board.pawnPromotion(ui.promotionRequest());
-            //promotionChoice(ui.promotionRequest());
-        */
-        //simplified version of turning on and off every turn
         whitesTurn = !whitesTurn;
-        /*
-        if (board.getCheckFlag()) {
-            if (board.isCheckMate()) {
-                ui.checkmate(!whitesTurn, boardData());
-                ui.onBoardUpdated(this.boardData());
-                System.exit(0);
-            }
-            ui.kingInCheckWarning(whitesTurn);
-        }
-        */
         evokeListeners();
         return true;
     }
@@ -133,10 +108,6 @@ public class ChessEngine {
         return makeMove(startRow, startCol, targetRow, targetCol);
     }
 
-/*    public void promotionChoice(int choice) {
-        board.pawnPromotion(choice);
-    }
-*/
     public char[][] boardData() {
         return board.boardData();
     }
