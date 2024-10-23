@@ -31,5 +31,10 @@ public class Queen extends Piece {
     }
 
     @Override
-    public String toString() { return "Q"; }
+    public String toString() {
+        if (isWhite())
+            return "Q";
+        else
+            return "q";
+    }
 }

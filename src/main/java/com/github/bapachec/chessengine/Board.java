@@ -412,12 +412,12 @@ public class Board {
         }
 
         Piece new_piece = switch (piece.toString()) {
-            case "P" -> new Pawn(piece.isWhite(), row, col);
-            case "R" -> new Rook(piece.isWhite(), row, col);
-            case "N" -> new Knight(piece.isWhite(), row, col);
-            case "B" -> new Bishop(piece.isWhite(), row, col);
-            case "Q" -> new Queen(piece.isWhite(), row, col);
-            case "K" -> new King(piece.isWhite(), row, col);
+            case "P","p" -> new Pawn(piece.isWhite(), row, col);
+            case "R","r" -> new Rook(piece.isWhite(), row, col);
+            case "N","n" -> new Knight(piece.isWhite(), row, col);
+            case "B","b" -> new Bishop(piece.isWhite(), row, col);
+            case "Q","q" -> new Queen(piece.isWhite(), row, col);
+            case "K","k" -> new King(piece.isWhite(), row, col);
             default -> throw new IllegalStateException("Unexpected Error");
         };
 

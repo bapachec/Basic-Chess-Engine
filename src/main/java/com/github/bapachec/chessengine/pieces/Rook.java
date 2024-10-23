@@ -37,7 +37,10 @@ public class Rook extends Piece {
 
     @Override
     public String toString() {
-        return "R";
+        if (isWhite())
+            return "R";
+        else
+            return "r";
     }
 
 }

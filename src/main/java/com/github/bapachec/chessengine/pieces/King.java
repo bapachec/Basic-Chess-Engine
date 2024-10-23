@@ -42,5 +42,10 @@ public class King extends Piece {
     }
     */
     @Override
-    public String toString() { return "K"; }
+    public String toString() {
+        if (isWhite())
+            return "K";
+        else
+            return "k";
+    }
 }

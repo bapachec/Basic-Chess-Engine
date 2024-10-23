@@ -20,5 +20,10 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public String toString() { return "B"; }
+    public String toString() {
+        if (isWhite())
+            return "B";
+        else
+            return "b";
+    }
 }
