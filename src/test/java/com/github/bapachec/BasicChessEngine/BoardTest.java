@@ -22,8 +22,8 @@ public class BoardTest {
     @Test
     void testInitialSetup() {
         char[][] expectedBoard = {
-                {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
-                {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+                {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+                {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
@@ -46,8 +46,8 @@ public class BoardTest {
         assertTrue(result, "white should be able to move f2 pawn to f4");
         //Board state after white turn
         char[][] expectedBoardAfterWhiteTurn = {
-                {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
-                {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+                {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+                {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
                 {'_', '_', '_', '_', '_', 'P', '_', '_'},
@@ -81,8 +81,8 @@ public class BoardTest {
 
         //Board state after white turn
         char[][] expectedBoardAfterWhiteTurn = {
-                {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
-                {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+                {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+                {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
                 {'_', '_', '_', '_', 'P', '_', '_', '_'},
@@ -100,9 +100,9 @@ public class BoardTest {
         assertTrue(result, "Black should be able to move pawn from d7 to d6");
 
         char[][] expectedBoardAfterBlackTurn = {
-                {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
-                {'P', 'P', 'P', '_', 'P', 'P', 'P', 'P'},
-                {'_', '_', '_', 'P', '_', '_', '_', '_'},
+                {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+                {'p', 'p', 'p', '_', 'p', 'p', 'p', 'p'},
+                {'_', '_', '_', 'p', '_', '_', '_', '_'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
                 {'_', '_', '_', '_', 'P', '_', '_', '_'},
                 {'_', '_', '_', '_', '_', '_', '_', '_'},
