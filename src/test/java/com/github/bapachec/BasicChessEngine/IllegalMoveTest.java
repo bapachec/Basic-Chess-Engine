@@ -1,7 +1,7 @@
 package com.github.bapachec.BasicChessEngine;
 
 import com.github.bapachec.chessengine.ChessEngine;
-import com.github.bapachec.chessengine.UserInterface;
+import com.github.bapachec.chessengine.ChessUI;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -9,12 +9,12 @@ import static org.mockito.Mockito.*;
 public class IllegalMoveTest {
 
     private ChessEngine engine;
-    private UserInterface mockUIListener;
+    private ChessUI mockUIListener;
 
     @BeforeEach
     void setUp() {
         engine = new ChessEngine();
-        mockUIListener = mock(UserInterface.class);
+        mockUIListener = mock(ChessUI.class);
         engine.addListener(mockUIListener);
         //engine.start();
     }

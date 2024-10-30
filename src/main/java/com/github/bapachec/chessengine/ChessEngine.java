@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ChessEngine {
-    private List<UserInterface> listeners = new ArrayList<>();
+    private List<ChessUI> listeners = new ArrayList<>();
     Board board = new Board();
     private boolean whitesTurn = true;
     private boolean gameOver = false;
@@ -15,18 +15,18 @@ public class ChessEngine {
             'a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7
     );
 
-    public void addListener(UserInterface listener) {
+    public void addListener(ChessUI listener) {
         listeners.add(listener);
     }
 
     private void evokeListenersOnStart() {
-        for (UserInterface listener: listeners) {
+        for (ChessUI listener: listeners) {
             listener.onBoardUpdated(boardData());
         }
     }
 
     private void evokeListeners() {
-        for (UserInterface listener: listeners) {
+        for (ChessUI listener: listeners) {
             if (board.getPromotionFlag())
                 board.pawnPromotion(listener.promotionRequest());
             if (board.getCheckFlag()) {
@@ -36,14 +36,13 @@ public class ChessEngine {
                 }
                 listener.kingInCheckWarning(whitesTurn);
             }
-
-            listener.onBoardUpdated(boardData());
+            listener.onBoardUpdated(board.boardData());
 
         }
     }
 
     private void evokeListenersOnIllegalMove() {
-        for (UserInterface listener: listeners) {
+        for (ChessUI listener: listeners) {
             if (board.getCheckFlag()) {
                 listener.kingInCheckWarning(whitesTurn);
             }
@@ -111,6 +110,5 @@ public class ChessEngine {
     public char[][] boardData() {
         return board.boardData();
     }
-
 
 }

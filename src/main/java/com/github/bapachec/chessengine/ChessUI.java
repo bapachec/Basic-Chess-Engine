@@ -1,6 +1,6 @@
 package com.github.bapachec.chessengine;
 
-public interface UserInterface {
+public interface ChessUI {
 
     void run();
 
@@ -11,5 +11,7 @@ public interface UserInterface {
     void checkmate(boolean whiteWon);
 
     void onBoardUpdated(char[][] boardData);
+
+    void stalemate();
 
 }

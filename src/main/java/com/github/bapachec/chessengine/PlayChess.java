@@ -2,7 +2,7 @@ package com.github.bapachec.chessengine;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class PlayChess implements UserInterface {
+public class PlayChess implements ChessUI {
     Scanner scan = new Scanner(System.in);
     ChessEngine engine;
 
@@ -133,4 +133,11 @@ public class PlayChess implements UserInterface {
         }
 
     }
+
+    @Override
+    public void stalemate() {
+        System.out.println("Stalemate.");
+    }
+
+
 }
