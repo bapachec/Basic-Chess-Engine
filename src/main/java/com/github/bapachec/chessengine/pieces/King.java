@@ -1,5 +1,7 @@
 package com.github.bapachec.chessengine.pieces;
 
+import com.github.bapachec.chessengine.Board;
+
 public class King extends Piece {
     private boolean notMoved = true;
 
@@ -35,12 +37,50 @@ public class King extends Piece {
         return notMoved;
     }
 
-    //method for seeing if n+1 board is legal
-    /*
-    public boolean isKingInCheck(Piece[][] board, boolean whiteTurn) {
-        return !isKingNotInCheck(board, getRow(), getColumn(), whiteTurn);
+    @Override
+    public boolean hasAnyLegalMoves(Piece[][] board, boolean whiteTurn) {
+
+        int[][] directions = {
+                {-1, 0}, {1, 0}, {0, -1}, {0, 1}, //up, down, left, right
+                {-1, -1}, {-1, 1}, {1, -1}, {1, 1} //top left, top right, lower left, lower right
+        };
+
+        int row = getRow();
+        int col = getColumn();
+
+        board[row][col] = null;
+
+        for (int[] dir: directions) {
+            int newRow = row + dir[0];
+            int newCol = col + dir[1];
+
+            if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7)
+                continue;
+
+            Piece target = board[newRow][newCol];
+
+            if (target != null && target.isWhite() == whiteTurn)
+                continue;
+
+            setRow(newRow);
+            setColumn(newCol);
+            board[newRow][newCol] = this;
+
+            if (Board.KingCheck.isKingNotInCheck(board, newRow, newCol, whiteTurn)) {
+                setRow(row);
+                setColumn(col);
+                return true;
+            }
+
+            board[newRow][newCol] = null;
+        }
+
+        setRow(row);
+        setColumn(col);
+        return false;
+
     }
-    */
+
     @Override
     public String toString() {
         if (isWhite())

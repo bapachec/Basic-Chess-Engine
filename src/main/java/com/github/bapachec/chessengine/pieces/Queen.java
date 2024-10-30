@@ -1,5 +1,7 @@
 package com.github.bapachec.chessengine.pieces;
 
+import com.github.bapachec.chessengine.Board;
+
 public class Queen extends Piece {
 
     public Queen(boolean isWhite, int row, int column) {
@@ -28,6 +30,17 @@ public class Queen extends Piece {
         else
             return (isColClear(board, this, row));
 
+    }
+
+    @Override
+    public boolean hasAnyLegalMoves(Piece[][] board, boolean whiteTurn, int king_row, int king_col) {
+        // directions
+        int[][] directions = {
+                {-1, 0}, {1, 0}, {0, -1}, {0, 1}, //up, down, left, right
+                {-1, -1}, {-1, 1}, {1, -1}, {1, 1} //top left, top right, lower left, lower right
+        };
+
+        return super.hasAnyLegalMovesContinuous(board, whiteTurn, directions, king_row, king_col);
     }
 
     @Override

@@ -455,6 +455,18 @@ public class Board {
         return copyBoard;
     }
 
+    private Piece[][] boardCopy() {
+        Piece[][] copyBoard = new Piece[8][8];
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                copyBoard[i][j] = BOARD[i][j];
+            }
+        }
+
+        return copyBoard;
+    }
+
     public char[][] boardData() {
         char[][] board = new char[8][8];
         for(int i = 0; i < 8; i ++) {
@@ -728,6 +740,36 @@ public class Board {
 
         }
 
+
+        return true;
+    }
+
+    public boolean isStaleMate() {
+        King king;
+        ArrayList<Piece> pieceList;
+
+        //black player
+        if (!whiteTurn) {
+            king = blackKing;
+            pieceList = blackPieceList;
+        }
+        else {
+            king = whiteKing;
+            pieceList = whitePieceList;
+        }
+
+        //deepcopy
+        Piece[][] boardCopy = boardCopy();
+        //king calling has any legal moves
+        if (king.hasAnyLegalMoves(boardCopy, whiteTurn)) {
+            return false;
+        }
+        //for loop on list calling on has any legal moves
+        for (Piece piece: pieceList) {
+            boardCopy = boardCopy();
+            if (piece.hasAnyLegalMoves(boardCopy, whiteTurn, king.getRow(), king.getColumn()))
+                return false;
+        }
 
         return true;
     }

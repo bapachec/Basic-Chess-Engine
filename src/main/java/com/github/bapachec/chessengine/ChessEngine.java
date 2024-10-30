@@ -36,6 +36,11 @@ public class ChessEngine {
                 }
                 listener.kingInCheckWarning(whitesTurn);
             }
+            else if (board.isStaleMate()) {
+                gameOver = true;
+                listener.stalemate();
+            }
+
             listener.onBoardUpdated(board.boardData());
 
         }
