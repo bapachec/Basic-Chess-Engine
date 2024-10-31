@@ -7,6 +7,8 @@ public class King extends Piece {
 
     public King(boolean isWhite, int row, int column) {
         super(isWhite, row, column);
+        if (row != 0 && row != 7)
+            notMoved = false;
     }
 
     @Override
@@ -72,7 +74,7 @@ public class King extends Piece {
                 return true;
             }
 
-            board[newRow][newCol] = null;
+            board[newRow][newCol] = target;
         }
 
         setRow(row);

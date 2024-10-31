@@ -242,22 +242,23 @@ public class Board {
 
         boolean didCastling = false;
 
+       //castling
         if (piece instanceof King) {
             //isTargetRook: {
             if (((King) piece).getNotMoved()) {
-                if (targetRow == 0 || targetRow == 7) {
-                    if (targetCol == 2) {
-                        targetCol = 0;
-                        targetPiece = BOARD[targetRow][0];
-                    }
-                    else if (targetCol == 6) {
-                        targetCol = 7;
-                        targetPiece = BOARD[targetRow][7];
-                    }
-
-                }
                 if (targetPiece != null) {
                     if (piece.isWhite() == targetPiece.isWhite()) {
+                        if (targetRow == 0 || targetRow == 7) {
+                            if (targetCol == 2) {
+                                targetCol = 0;
+                                targetPiece = BOARD[targetRow][0];
+                            }
+                            else if (targetCol == 6) {
+                                targetCol = 7;
+                                targetPiece = BOARD[targetRow][7];
+                            }
+
+                        }
                         if (targetPiece instanceof Rook) {
                             if (isCastlingValid(targetRow, targetPiece.getColumn())) {
                                 didCastling = true;
@@ -834,7 +835,7 @@ public class Board {
             //col
             for (int j = 0; j < 8; j++) {
                 Piece piece = board[j][col];
-                if (piece == null || piece instanceof King)
+                if (piece == null)
                     continue;
                 if (piece.isWhite() != whiteTurn)
                     if (piece.isLegalMove(board, row, col)) {
