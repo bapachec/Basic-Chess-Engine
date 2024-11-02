@@ -31,6 +31,8 @@ public class PlayChess implements ChessUI {
                     else
                         System.out.println("It is blacks turn");
 
+                    //ask for draw and
+                    System.out.println("Request draw by typing \"Draw\" ");
 
 
                     //pick a piece
@@ -75,8 +77,16 @@ public class PlayChess implements ChessUI {
                 scan.nextLine();
             }
             catch (InputMismatchException e) {
-                System.out.println("Input error");
-                scan.nextLine();
+                String in = scan.next();
+
+                if (in.equalsIgnoreCase("draw")) {
+                    engine.requestDraw();
+                }
+                else {
+                    System.out.println("Input error");
+                    scan.nextLine();
+                }
+
             }
 
         }
@@ -136,8 +146,29 @@ public class PlayChess implements ChessUI {
 
     @Override
     public void stalemate() {
-        System.out.println("Stalemate.");
+        System.out.println("Stalemate.\nGame Ends.");
     }
 
+    @Override
+    public void draw() {
+        System.out.println("Draw.\nGame Ends.");
+    }
+
+    @Override
+    public boolean requestingDraw(boolean isWhitesTurn) {
+        String player;
+        if (isWhitesTurn)
+            player = "White";
+        else
+            player = "Black";
+
+        System.out.println("0 is no and 1 (any number except 0) is yes");
+        System.out.print(player + " is requesting a draw, will you accept?: ");
+
+        int ans = scan.nextInt();
+
+        return ans != 0;
+
+    }
 
 }

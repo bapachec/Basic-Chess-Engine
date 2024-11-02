@@ -775,8 +775,14 @@ public class Board {
         return true;
     }
 
-    public static class KingCheck {
+    public boolean isDraw() {
 
+        //insufficientMaterial
+        return whitePieceList.isEmpty() && blackPieceList.isEmpty();
+    }
+
+    public static class KingCheck {
+        //row and col is the location of the king being processed
         public static boolean isKingNotInCheck(Piece[][] board, int row, int col, boolean whiteTurn) {
             //row
             for (int i = 0; i < 8; i++) {
@@ -791,6 +797,7 @@ public class Board {
             }
 
             //diag x
+                //bottom left
                 for (int i = row + 1, j = col - 1; j >= 0 && i < 8; i++, j--) {
                     Piece piece = board[i][j];
                     if (piece == null)
@@ -800,7 +807,7 @@ public class Board {
                             return false;
                         }
                 }
-
+                //bottom right
                 for (int i = row + 1, j = col + 1; j < 8 && i < 8; i++, j++) {
                     Piece piece = board[i][j];
                     if (piece == null)
@@ -810,7 +817,7 @@ public class Board {
                             return false;
                         }
                 }
-
+                //top left
                 for (int i = row - 1, j = col - 1; j >= 0 && i >= 0; i--, j--) {
                     Piece piece = board[i][j];
                     if (piece == null)
@@ -820,7 +827,7 @@ public class Board {
                             return false;
                         }
                 }
-
+                //top right
                 for (int i = row - 1, j = col + 1; j < 8 && i >= 0; i--, j++) {
                     Piece piece = board[i][j];
                     if (piece == null)
@@ -830,7 +837,6 @@ public class Board {
                             return false;
                         }
                 }
-
 
             //col
             for (int j = 0; j < 8; j++) {

@@ -14,4 +14,8 @@ public interface ChessUI {
 
     void stalemate();
 
+    void draw();
+
+    boolean requestingDraw(boolean whiteTurn);
+
 }

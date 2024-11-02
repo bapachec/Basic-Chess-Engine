@@ -40,6 +40,10 @@ public class ChessEngine {
                 gameOver = true;
                 listener.stalemate();
             }
+            else if (board.isDraw()) {
+                gameOver = true;
+                listener.draw();
+            }
 
             listener.onBoardUpdated(board.boardData());
 
@@ -55,11 +59,19 @@ public class ChessEngine {
         }
     }
 
-    public boolean isWhitesTurn() {
-        return whitesTurn;
-    }
+    public boolean isWhitesTurn() { return whitesTurn; }
 
     public boolean isGameOver() { return gameOver; }
+
+    public void requestDraw() {
+        for (ChessUI listener: listeners) {
+            if (listener.requestingDraw(whitesTurn)) {
+                gameOver = true;
+                listener.draw();
+            }
+        }
+
+    }
 
     public void start() {
         board.populateBoard();
