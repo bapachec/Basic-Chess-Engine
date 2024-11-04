@@ -784,7 +784,8 @@ public class Board {
     public static class KingCheck {
         //row and col is the location of the king being processed
         public static boolean isKingNotInCheck(Piece[][] board, int row, int col, boolean whiteTurn) {
-            //row
+
+            //row=======================================================
             for (int i = 0; i < 8; i++) {
                 Piece piece = board[row][i];
                 if (piece == null)
@@ -796,49 +797,31 @@ public class Board {
 
             }
 
-            //diag x
-                //bottom left
-                for (int i = row + 1, j = col - 1; j >= 0 && i < 8; i++, j--) {
-                    Piece piece = board[i][j];
-                    if (piece == null)
-                        continue;
-                    if (piece.isWhite() != whiteTurn)
-                        if (piece.isLegalMove(board, row, col)) {
-                            return false;
-                        }
-                }
-                //bottom right
-                for (int i = row + 1, j = col + 1; j < 8 && i < 8; i++, j++) {
-                    Piece piece = board[i][j];
-                    if (piece == null)
-                        continue;
-                    if (piece.isWhite() != whiteTurn)
-                        if (piece.isLegalMove(board, row, col)) {
-                            return false;
-                        }
-                }
-                //top left
-                for (int i = row - 1, j = col - 1; j >= 0 && i >= 0; i--, j--) {
-                    Piece piece = board[i][j];
-                    if (piece == null)
-                        continue;
-                    if (piece.isWhite() != whiteTurn)
-                        if (piece.isLegalMove(board, row, col)) {
-                            return false;
-                        }
-                }
-                //top right
-                for (int i = row - 1, j = col + 1; j < 8 && i >= 0; i--, j++) {
-                    Piece piece = board[i][j];
-                    if (piece == null)
-                        continue;
-                    if (piece.isWhite() != whiteTurn)
-                        if (piece.isLegalMove(board, row, col)) {
-                            return false;
-                        }
+            //diag x=======================================================
+
+            int[][] directions = {
+                    {-1, -1}, {-1, 1}, //top left, top right
+                    {1, -1}, {1, 1} //bottom left, bottom right
+            };
+
+            for (int[] dir: directions) {
+
+                if (row+dir[0] < 0 || row+dir[0] > 7 || col+dir[1] < 0 || col+dir[1] > 7) {
+                    continue;
                 }
 
-            //col
+                for (int i = row + dir[0], j = col + dir[1]; (j >= 0 && j < 8) && (i >= 0 && i < 8); i+=dir[0], j+=dir[1]) {
+                    Piece piece = board[i][j];
+                    if (piece == null)
+                        continue;
+                    if (piece.isWhite() != whiteTurn)
+                        if (piece.isLegalMove(board, row, col)) {
+                            return false;
+                        }
+                }
+            }
+
+            //col=======================================================
             for (int j = 0; j < 8; j++) {
                 Piece piece = board[j][col];
                 if (piece == null)
@@ -850,90 +833,31 @@ public class Board {
             }
 
             //knights=======================================================
-            //top left
-            int i = 0;
-            int j = 0;
-            //(int i = row - 1, j = col - 1)
-            //if (((i = row - 1) > 0)  && ((j = col - 1) > 0)) {
-            i = row - 1;
-            j = col - 1;
-            Piece piece;
 
-            if (i >= 0 && j-1 >= 0) {
-                if ((piece = board[i][j - 1]) instanceof Knight) {
-                    if (piece.isWhite() != whiteTurn) {
-                        //attackingLine = null;
-                        return false;
-                    }
+            int[][] knight_directions = {
+                    {-1, -2}, {-2, -1}, //top left
+                    {-2, 1}, {-1, 2}, //top right
+                    {1, -2}, {2, -1}, //lower left
+                    {2, 1}, {1, 2} //lower right
+            };
 
-                }
-            }
-            if (i - 1 >= 0 && j >= 0) {
-                if ((piece = board[i - 1][j]) instanceof Knight) {
-                    if (piece.isWhite() != whiteTurn) {
-                        return false;
-                    }
-                }
-            }
-
-            //top right
-
-            i = row - 1;
-            j = col + 1;
-            //Piece piece;
-            if (i >= 0 && j+1 <= 7) {
-                if ((piece = board[i][j + 1]) instanceof Knight) {
-                    if (piece.isWhite() != whiteTurn) {
-                        return false;
-                    }
-                }
-            }
-            if (i-1 >= 0 && j <= 7) {
-                if ((piece = board[i - 1][j]) instanceof Knight) {
-                    if (piece.isWhite() != whiteTurn) {
-                        return false;
-                    }
-                }
-            }
+            for (int[] dir: knight_directions) {
+                int i = row + dir[0];
+                int j = col + dir[1];
 
 
-            //bottom left
 
-            i = row + 1;
-            j = col - 1;
-            if (i <= 7 && j-1 >= 0) {
-                if ((piece = board[i][j - 1]) instanceof Knight) {
-                    if (piece.isWhite() != whiteTurn) {
-                        return false;
-                    }
-                }
-            }
-            if (i+1 <= 7 && j >= 0) {
-                if ((piece = board[i + 1][j]) instanceof Knight) {
-                    if (piece.isWhite() != whiteTurn) {
-                        return false;
-                    }
-                }
-            }
+                if (i < 0 || i > 7 || j < 0 || j > 7)
+                    continue;
 
+                Piece target = board[i][j];
 
-            //bottom right
+                if (!(target instanceof Knight))
+                    continue;
 
-            i = row + 1;
-            j = col + 1;
-            if (i <= 7 && j+1 <= 7) {
-                if ((piece = board[i][j + 1]) instanceof Knight) {
-                    if (piece.isWhite() != whiteTurn) {
-                        return false;
-                    }
-                }
-            }
-            if (i+1 <= 7 && j <= 7) {
-                if ((piece = board[i + 1][j]) instanceof Knight) {
-                    if (piece.isWhite() != whiteTurn) {
-                        return false;
-                    }
-                }
+                if (target.isWhite() != whiteTurn)
+                    return false;
+
             }
 
 
