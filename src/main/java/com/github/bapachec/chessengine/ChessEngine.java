@@ -84,7 +84,7 @@ public class ChessEngine {
     }
 
     public boolean validPiece(int row, int col) {
-        return board.samePiece(row, col, whitesTurn);
+        return board.samePiece(row, col);
     }
 
     public boolean validPiece(String selectedPosition) {
@@ -93,7 +93,7 @@ public class ChessEngine {
         int row = Character.getNumericValue(selectedPosition.charAt(1));
         row = 8 - row;
 
-        return board.samePiece(row, col, whitesTurn);
+        return board.samePiece(row, col);
 
     }
 

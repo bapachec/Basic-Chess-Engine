@@ -201,17 +201,12 @@ public class Board {
     }
 
     //to check if chosen piece is player's color
-    public boolean samePiece(int row, int col, boolean isWhitesTurn) {
+    public boolean samePiece(int row, int col) {
         Piece piece = BOARD[row][col];
         if (piece == null)
             return false;
 
-        if (isWhitesTurn){
-            return piece.isWhite();
-        }
-        else {
-            return !piece.isWhite();
-        }
+        return piece.isWhite() == whiteTurn;
     }
 
     private boolean samePiece(Position pickedSpace) {
