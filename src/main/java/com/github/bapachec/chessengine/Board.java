@@ -119,7 +119,6 @@ public class Board {
         whiteRooks[1] = whiteRookPiece;
 
         Collections.addAll(blackPieceList, blackRooks);
-        //blackPieceList.add((Piece) Arrays.asList(blackRooks));
         Collections.addAll(whitePieceList, whiteRooks);
 
 
@@ -148,8 +147,6 @@ public class Board {
         whiteKnights[1] = whiteKnight;
 
         Collections.addAll(blackPieceList, blackKnights);
-        //remove this below
-        //blackPieceList.remove(null);
         Collections.addAll(whitePieceList, whiteKnights);
 
 
@@ -244,7 +241,6 @@ public class Board {
 
        //castling
         if (piece instanceof King) {
-            //isTargetRook: {
             if (((King) piece).getNotMoved()) {
                 if (targetPiece != null) {
                     if (piece.isWhite() == targetPiece.isWhite()) {
@@ -268,7 +264,6 @@ public class Board {
                                 return false;
                             }
 
-                            //break isTargetRook;
                         }
                         else {
                             return false;
@@ -281,7 +276,6 @@ public class Board {
                     return false;
             }
 
-            //}
         }
         else if (targetPiece != null) {
             if (piece.isWhite() == targetPiece.isWhite())
@@ -294,30 +288,21 @@ public class Board {
         if (didCastling) {
             targetCol = castling(targetPiece, targetRow, targetPiece.getColumn());
         }
+
         //could reduce both king ifs to one if but planning on highlighting the king in trouble
 
-        //if (checkFlag) {
         if (!didCastling) {
             Piece[][] copyBoard = boardCopyWithPieceMoved(start, piece, target);
             if (!whiteTurn) {
-                //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
                 if (!KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
                     return false;
             } else {
-                //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
                 if (!KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
                     return false;
             }
-            //}
         }
 
         BOARD[start.row()][start.col()] = null;
-        /*if (switchPieces) {
-            //method for swapping rook with king
-            BOARD[row][col] = null;
-            col = castling(piece, targetPiece);
-            friendlyPiece = true;
-        }*/
 
         piece.setRow(targetRow);
         piece.setColumn(targetCol);
@@ -339,20 +324,15 @@ public class Board {
         }
         lastPieceMoved = piece;
         whiteTurn = !whiteTurn;
-        //if (!checkFlag) {
         //can clean this part up by calling kings check method?
         if (!whiteTurn) {
             //black king
-
             checkFlag = !KingCheck.isKingNotInCheck(BOARD, blackKing.getRow(), blackKing.getColumn(), whiteTurn);
         }
         else {
             //white king
             checkFlag = !KingCheck.isKingNotInCheck(BOARD, whiteKing.getRow(), whiteKing.getColumn(), whiteTurn);
         }
-        //}
-        //else
-        //    checkFlag = false;
 
 
         return true;
@@ -361,7 +341,6 @@ public class Board {
 
     private boolean isCastlingValid(int row, int col) {
 
-        //int kingCol = 4;
         //castling right else left
         if (4 < col) {
             for (int i = 4; i < 7; i++) {
@@ -384,7 +363,6 @@ public class Board {
     }
 
     private int castling(Piece Rook, int row, int col) {
-    //BOARD[location[0]][location[1]] = targetPiece;
         //if king castling with right rook
         int new_col;
         if (4 < Rook.getColumn()) {
@@ -426,13 +404,9 @@ public class Board {
         if (new_piece instanceof King) {
             if (!new_piece.isWhite()) {
                 blackKing_N1 = (King) new_piece;
-                //blackKing_N1.setRow(row);
-                //blackKing_N1.setColumn(col);
             }
             else {
                 whiteKing_N1 = (King) new_piece;
-                //whiteKing_N1.setRow(row);
-                //whiteKing_N1.setColumn(col);
             }
         }
         else {
@@ -487,11 +461,6 @@ public class Board {
     public boolean getPromotionFlag() { return promotionFlag; }
     public boolean getCheckFlag() { return checkFlag; }
 
-    /*
-    public void resetPromotionFlag() {
-        promotionFlag = !promotionFlag;
-    }
-    */
     public void pawnPromotion(int choice) {
 
         Piece new_piece = switch (choice) {
@@ -541,29 +510,21 @@ public class Board {
         //can the king escape
         Piece[][] boardCopy = boardCopyWithKingMissing(x, y);
 
-        //on same diagonally impossible with just this, need to use arraylist to contain coordinates diagonals
-        //if ( lastPieceMoved.getRow() == trappedKing.getRow()) {
         for(int[] space : possibleSpaces) {
 
             if (space[0] < 0 || space[0] > 7 || space[1] < 0 || space[1] > 7)
                 continue;
-            //on same row
-            //on same col
-            //if (space[0] == p || space[1] == q)
-            //    continue;
             Piece holdPiece = BOARD[space[0]][space[1]];
             if (holdPiece != null)
                 if (holdPiece.isWhite() == trappedKing.isWhite() )
                     continue;
             King futureKing = new King(trappedKing.isWhite(), space[0], space[1]);
             boardCopy[space[0]][space[1]] = futureKing;
-            //if(!futureKing.isKingInCheck(boardCopy, whiteTurn))
             if (KingCheck.isKingNotInCheck(boardCopy, futureKing.getRow(), futureKing.getColumn(), whiteTurn))
                 return false;
             boardCopy[space[0]][space[1]] = holdPiece;
         }
 
-        //}
 
         ArrayList<Piece> defenderPieceList;
         if (!trappedKing.isWhite())
@@ -579,21 +540,19 @@ public class Board {
                 Position start = new Position(counterPiece.getRow(), counterPiece.getColumn());
                 Piece[][] copyBoard = boardCopyWithPieceMoved(start, counterPiece, target);
                 if (!whiteTurn) {
-                    //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
                     if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
                         return false;
                 } else {
-                    //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
                     if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
                         return false;
                 }
-                //return false
             }
         }
 
         //early test case because knights cannot be blocked
         if (lastPieceMoved instanceof Knight)
             return true;
+
         //todo this can be improved if the piece is adjacent to king, this means it cannot be blocked so searching is pointless
         //can remaining pieces block threat
         if (p == x) {
@@ -606,15 +565,12 @@ public class Board {
                             Position start = new Position(blockingPiece.getRow(), blockingPiece.getColumn());
                             Piece[][] copyBoard = boardCopyWithPieceMoved(start, blockingPiece, target);
                             if (!whiteTurn) {
-                                //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
                                 if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
                                     return false;
                             } else {
-                                //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
                                 if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
                                     return false;
                             }
-                            //return false;
                         }
                     }
                 }
@@ -628,15 +584,12 @@ public class Board {
                             Position start = new Position(blockingPiece.getRow(), blockingPiece.getColumn());
                             Piece[][] copyBoard = boardCopyWithPieceMoved(start, blockingPiece, target);
                             if (!whiteTurn) {
-                                //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
                                 if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
                                     return false;
                             } else {
-                                //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
                                 if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
                                     return false;
                             }
-                            //return false;
                         }
                     }
                 }
@@ -726,15 +679,12 @@ public class Board {
                         Position start = new Position(blockingPiece.getRow(), blockingPiece.getColumn());
                         Piece[][] copyBoard = boardCopyWithPieceMoved(start, blockingPiece, target);
                         if (!whiteTurn) {
-                            //if (blackKing_N1.isKingInCheck(copyBoard, whiteTurn))
                             if (KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
                                 return false;
                         } else {
-                            //if (whiteKing_N1.isKingInCheck(copyBoard, whiteTurn))
                             if (KingCheck.isKingNotInCheck(copyBoard, whiteKing_N1.getRow(), whiteKing_N1.getColumn(), whiteTurn))
                                 return false;
                         }
-                        //return false;
                     }
                 }
             }
