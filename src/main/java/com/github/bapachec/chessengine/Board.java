@@ -233,65 +233,44 @@ public class Board {
         int targetRow = target.row();
         int targetCol = target.col();
 
-        //if (piece == null) not needed i think
-        //    return false;
         Piece targetPiece = BOARD[targetRow][targetCol];
 
-        boolean didCastling = false;
+        if (targetPiece != null && !(targetPiece instanceof Rook) && targetPiece.isWhite() == piece.isWhite())
+            return false;
+
+
+        boolean castlingValid = false;
 
        //castling
-        if (piece instanceof King) {
-            if (((King) piece).getNotMoved()) {
-                if (targetPiece != null) {
-                    if (piece.isWhite() == targetPiece.isWhite()) {
-                        if (targetRow == 0 || targetRow == 7) {
-                            if (targetCol == 2) {
-                                targetCol = 0;
-                                targetPiece = BOARD[targetRow][0];
-                            }
-                            else if (targetCol == 6) {
-                                targetCol = 7;
-                                targetPiece = BOARD[targetRow][7];
-                            }
-
-                        }
-                        if (targetPiece instanceof Rook) {
-                            if (isCastlingValid(targetRow, targetPiece.getColumn())) {
-                                didCastling = true;
-                                friendlyPiece = true;
-                            }
-                            else {
-                                return false;
-                            }
-
-                        }
-                        else {
-                            return false;
-                        }
-                    }
+        if (piece instanceof King && ((King) piece).getNotMoved()) {
+            if (targetRow == 0 || targetRow == 7) {
+                if (targetCol == 2) {
+                    targetPiece = BOARD[targetRow][0];
+                }
+                else if (targetCol == 6) {
+                    targetPiece = BOARD[targetRow][7];
                 }
             }
-            else if (targetPiece != null) {
-                if (piece.isWhite() == targetPiece.isWhite())
+            if (targetPiece instanceof Rook && piece.isWhite() == targetPiece.isWhite()) {
+                if (isCastlingValid(targetRow, targetPiece.getColumn())) {
+                    targetCol = targetPiece.getColumn();
+                    castlingValid = true;
+                    friendlyPiece = true;
+                }
+                else {
                     return false;
-            }
+                }
 
-        }
-        else if (targetPiece != null) {
-            if (piece.isWhite() == targetPiece.isWhite())
-                return false;
+            }
         }
 
         if (!piece.isLegalMove(BOARD, targetRow, targetCol))
             return false;
 
-        if (didCastling) {
+        if (castlingValid) {
             targetCol = castling(targetPiece, targetRow, targetPiece.getColumn());
         }
-
-        //could reduce both king ifs to one if but planning on highlighting the king in trouble
-
-        if (!didCastling) {
+        else { //could reduce both king ifs to one if but planning on highlighting the king in trouble
             Piece[][] copyBoard = boardCopyWithPieceMoved(start, piece, target);
             if (!whiteTurn) {
                 if (!KingCheck.isKingNotInCheck(copyBoard, blackKing_N1.getRow(), blackKing_N1.getColumn(), whiteTurn))
