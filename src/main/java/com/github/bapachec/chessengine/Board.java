@@ -18,6 +18,11 @@ public class Board {
     private ArrayList<Piece> blackPieceList = new ArrayList<>();
     private ArrayList<Piece> whitePieceList = new ArrayList<>();
 
+    /**
+     * Populates the chess board with a custom configurations.
+     *
+     * @param board A 2D char array representing the custom board configuration.
+     */
     public void customPopulateBoard(char[][] board) {
 
         for (int i = 0; i < 8; i++) {
@@ -36,6 +41,15 @@ public class Board {
 
     }
 
+    /**
+     * Creates and returns a white chess piece based on specified character.
+     * This method supports {@link #customPopulateBoard(char[][])} by converting characters
+     * representing white pieces (e.g. 'K', 'Q', 'R') into their respective piece objects.
+     *
+     * @param pieceChar The character representing the type of white piece to create.
+     * @param row The row index representing the piece's position on the board.
+     * @param col The column index representing the piece's position on the board.
+     */
     private void createWhitePiece(char pieceChar, int row, int col) {
 
         Piece new_piece = switch (pieceChar) {
@@ -58,6 +72,15 @@ public class Board {
         BOARD[row][col] = new_piece;
     }
 
+    /**
+     * Creates and returns a black chess piece based on specified character.
+     * This method supports {@link #customPopulateBoard(char[][])} by converting characters
+     * representing black pieces (e.g. 'k', 'q', 'r') into their respective piece objects.
+     *
+     * @param pieceChar The character representing the type of black piece to create.
+     * @param row The row index representing the piece's position on the board.
+     * @param col The column index representing the piece's position on the board.
+     */
     private void createBlackPiece(char pieceChar, int row, int col) {
 
         Piece new_piece = switch (pieceChar) {
@@ -79,6 +102,9 @@ public class Board {
         BOARD[row][col] = new_piece;
     }
 
+    /**
+     * Populates the chess board with default configuration.
+     */
     public void populateBoard() {
         for (int i = 0; i <8; i++) {
             Piece blackPawn = new Pawn(false, 1, i);
@@ -200,8 +226,14 @@ public class Board {
 
     }
 
-    //to check if chosen piece is player's color
+    /**
+     * Check if chosen piece is the current player's color.
+     * @param row The row index representing the piece's position on the board.
+     * @param col The column index representing the piece's position on the board.
+     * @return {@code true} if a chosen piece's color matches current player; {@code false} otherwise.
+     */
     public boolean samePiece(int row, int col) {
+
         Piece piece = BOARD[row][col];
         if (piece == null)
             return false;
@@ -209,6 +241,11 @@ public class Board {
         return piece.isWhite() == whiteTurn;
     }
 
+    /**
+     * Check if chosen piece is the current player's color.
+     * @param pickedSpace
+     * @return
+     */
     private boolean samePiece(Position pickedSpace) {
         int row = pickedSpace.row();
         int col = pickedSpace.col();
@@ -416,6 +453,10 @@ public class Board {
         return copyBoard;
     }
 
+    /**
+     * Generates a 2D char array representing the current state of the chess board.
+     * @return A 2D char array representing the board state with each element corresponding to a piece or empty space.
+     */
     public char[][] boardData() {
         char[][] board = new char[8][8];
         for(int i = 0; i < 8; i ++) {
@@ -432,7 +473,18 @@ public class Board {
         return board;
     }
 
+    /**
+     * Returns the promotion status of the current game.
+     *
+     * @return {@code true} if a promotion condition exists for the current player; {@code false} otherwise.
+     */
     public boolean getPromotionFlag() { return promotionFlag; }
+
+    /**
+     * Returns the check status of the current game.
+     *
+     * @return {@code true} if a check condition exists for the opposing player; {@code false} otherwise.
+     */
     public boolean getCheckFlag() { return checkFlag; }
 
     public void pawnPromotion(int choice) {
@@ -622,7 +674,7 @@ public class Board {
                 }
             }
         }
-        else {
+        else { // check for one diagonal direction only based on lastPiece's location
             int r, c;
             //bottom right
             if (x < p && y < q) {
