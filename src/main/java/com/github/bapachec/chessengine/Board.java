@@ -5,6 +5,14 @@ import com.github.bapachec.chessengine.pieces.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Represents the chess board and manages the state of the game.
+ * <p>
+ *     The {@code Board} class interacts with pieces on the board through a 2D array
+ *     of {@link Piece} objects, each representing a chess piece at a specific position.
+ *     Its main function is updating and checking the board's status as the game progresses.
+ * </p>
+ */
 public class Board {
     private final Piece[][] BOARD = new Piece[8][8];
     private boolean whiteTurn = true;
@@ -44,11 +52,11 @@ public class Board {
     /**
      * Creates and returns a white chess piece based on specified character.
      * This method supports {@link #customPopulateBoard(char[][])} by converting characters
-     * representing white pieces (e.g. 'K', 'Q', 'R') into their respective piece objects.
+     * representing white pieces (e.g. 'K', 'Q', 'R') into their respective {@link Piece} objects.
      *
-     * @param pieceChar The character representing the type of white piece to create.
-     * @param row The row index representing the piece's position on the board.
-     * @param col The column index representing the piece's position on the board.
+     * @param pieceChar The character representing the type of white chess {@link Piece} to create.
+     * @param row The row index representing the chess piece's position on the board.
+     * @param col The column index representing the chess piece's position on the board.
      */
     private void createWhitePiece(char pieceChar, int row, int col) {
 
@@ -73,13 +81,13 @@ public class Board {
     }
 
     /**
-     * Creates and returns a black chess piece based on specified character.
+     * Creates and returns a black chess {@link Piece} based on specified character.
      * This method supports {@link #customPopulateBoard(char[][])} by converting characters
-     * representing black pieces (e.g. 'k', 'q', 'r') into their respective piece objects.
+     * representing black pieces (e.g. 'k', 'q', 'r') into their respective {@link Piece} objects.
      *
-     * @param pieceChar The character representing the type of black piece to create.
-     * @param row The row index representing the piece's position on the board.
-     * @param col The column index representing the piece's position on the board.
+     * @param pieceChar The character representing the type of black {@link Piece} to create.
+     * @param row The row index representing the chess piece's position on the board.
+     * @param col The column index representing the chess piece's position on the board.
      */
     private void createBlackPiece(char pieceChar, int row, int col) {
 
@@ -228,9 +236,9 @@ public class Board {
 
     /**
      * Check if chosen piece is the current player's color.
-     * @param row The row index representing the piece's position on the board.
-     * @param col The column index representing the piece's position on the board.
-     * @return {@code true} if a chosen piece's color matches current player; {@code false} otherwise.
+     * @param row The row index representing the chess piece's position on the board.
+     * @param col The column index representing the chess piece's position on the board.
+     * @return {@code true} if a chosen chess piece's color matches current player; {@code false} otherwise.
      */
     public boolean samePiece(int row, int col) {
 
@@ -242,9 +250,9 @@ public class Board {
     }
 
     /**
-     * Check if chosen piece is the current player's color.
-     * @param pickedSpace
-     * @return
+     * Check if chosen chess piece is the current player's color.
+     * @param pickedSpace A {@link Position} record representing the chess piece's position on the board.
+     * @return {@code true} if a chosen chess piece's color matches current player; {@code false} otherwise.
      */
     private boolean samePiece(Position pickedSpace) {
         int row = pickedSpace.row();
@@ -256,6 +264,13 @@ public class Board {
         return piece.isWhite() == whiteTurn;
     }
 
+    /**
+     * Moves a specified chess piece from its starting location to a target location on the board.
+     *
+     * @param start A {@link Position} record representing the piece's current location.
+     * @param target A {@link Position} record representing the desired target location.
+     * @return {@code true} if the move is successful; {@code false} otherwise.
+     */
     public boolean movePiece(Position start, Position target) {
         if (!samePiece(start)) {
             return false;
@@ -350,6 +365,13 @@ public class Board {
 
     }
 
+    /**
+     * Determines if castling is possible with a specified rook {@link Piece}.
+     *
+     * @param row The row index representing the rook's current position on the board.
+     * @param col The column index representing the rook's current position on the board.
+     * @return {@code true} if castling is possible; {@code false} otherwise.
+     */
     private boolean isCastlingValid(int row, int col) {
 
         //castling right else left
@@ -373,6 +395,14 @@ public class Board {
         return true;
     }
 
+    /**
+     * Updates the specified rook's position and the board state as part of the castling move.
+     *
+     * @param Rook The rook {@link Piece} that is participating in the castling move.
+     * @param row The row index representing the rook's current position on the board.
+     * @param col The column index representing the rook's current position on the board.
+     * @return The column index representing the new king's position on the board after castling.
+     */
     private int castling(Piece Rook, int row, int col) {
         //if king castling with right rook
         int new_col;
@@ -391,6 +421,14 @@ public class Board {
 
     }
 
+    /**
+     * Generates a shallow copy of the current 2D piece array, with a specified piece moved to a new location.
+     *
+     * @param start A {@link Position} record representing the starting location of the specified piece.
+     * @param piece {@link Piece} to move from the starting position to the target position.
+     * @param target A {@link Position} record representing the target location for the specified piece.
+     * @return A 2D {@link Piece} array that is a shallow copy of the current board, with the specified piece moved.
+     */
     private Piece[][] boardCopyWithPieceMoved(Position start, Piece piece, Position target) {
         int row = target.row();
         int col = target.col();
@@ -429,6 +467,13 @@ public class Board {
         return copyBoard;
     }
 
+    /**
+     * Generates a shallow copy of the current 2D piece array, with a specified king excluded, representing the board.
+     *
+     * @param row The row index representing the king's position.
+     * @param col The column index representing the king's position.
+     * @return A 2D {@link Piece} array that is a shallow copy of the current board, with the specified king missing.
+     */
     private Piece[][] boardCopyWithKingMissing(int row, int col) {
         Piece[][] copyBoard = new Piece[8][8];
         for (int i = 0; i < 8; i++) {
@@ -441,6 +486,11 @@ public class Board {
         return copyBoard;
     }
 
+    /**
+     * Generates a shallow copy of the current 2D {@link Piece} array representing the board.
+     *
+     * @return A 2D {@link Piece} array that is a shallow copy of the current board.
+     */
     private Piece[][] boardCopy() {
         Piece[][] copyBoard = new Piece[8][8];
 
@@ -487,6 +537,14 @@ public class Board {
      */
     public boolean getCheckFlag() { return checkFlag; }
 
+//todo switch IllegalStateException to IllegalArgumentException
+
+    /**
+     * Processes, create and return a new {@link Piece} to replace the pawn being promoted.
+     *
+     * @param choice The number (1-4) representing one of the four pieces to be promoted to.
+     * @throws IllegalStateException if the choice is not between 1 and 4.
+     */
     public void pawnPromotion(int choice) {
 
         Piece new_piece = switch (choice) {
@@ -511,6 +569,11 @@ public class Board {
 
     }
 
+    /**
+     * Checks if a checkmate condition has occurred in the game.
+     *
+     * @return {@code true} if a checkmate condition exists; {@code false} otherwise.
+     */
     public boolean isCheckMate() {
         King trappedKing;
         if (!whiteTurn) {
@@ -721,6 +784,11 @@ public class Board {
         return true;
     }
 
+    /**
+     * Checks if the game is in a stalemate.
+     *
+     * @return {@code true} if the game is in a stalemate; {@code false} otherwise.
+     */
     public boolean isStaleMate() {
         King king;
         ArrayList<Piece> pieceList;
@@ -751,14 +819,32 @@ public class Board {
         return true;
     }
 
+    /**
+     * Checks if the game is in a draw state.
+     *
+     * @return {@code true} if the game is a draw; {@code false} otherwise.
+     */
     public boolean isDraw() {
 
         //insufficientMaterial
         return whitePieceList.isEmpty() && blackPieceList.isEmpty();
     }
 
+    /**
+     * This inner static class provides methods to determine if a specified king is in check.
+     */
     public static class KingCheck {
         //row and col is the location of the king being processed
+
+        /**
+         * Determines if a specified king is in check.
+         *
+         * @param board A 2D array of {@link Piece} objects representing the game's current state.
+         * @param row The row index representing the king's position.
+         * @param col The column index representing the king's position.
+         * @param whiteTurn A boolean flag indicating if it's white player's turn, used for excluding friendly pieces.
+         * @return {@code true} if the specified king is in check; {@code false} otherwise.
+         */
         public static boolean isKingNotInCheck(Piece[][] board, int row, int col, boolean whiteTurn) {
 
             //row=======================================================
